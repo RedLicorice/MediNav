@@ -33,7 +33,7 @@ public class ChoosePosition extends CommonActivity implements AdapterView.OnItem
                                int pos, long id) {
         String selected = parent.getItemAtPosition(pos).toString();
         AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
-        dlgBuilder.setTitle(R.string.change_floor_dialog_title);
+        dlgBuilder.setTitle("Padre Pio XoXo");
         dlgBuilder.setMessage("Facoltà scelta: " + selected);
         dlgBuilder.setCancelable(false);
         dlgBuilder.setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
