@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Medinav</string>
+    <string name="permission_error_title">Permission Required</string>
+    <string name="permission_error">To work correctly this app requires permission to use camera.</string>
+    <string name="choose_destination">Please choose faculty and destination</string>
+    <string name="qr_scan">Scan QR Code for next location</string>
+    <string name="button_send">Send</string>
+    <string name="button_navigate">Explore</string>
+    <string name="button_scan_qr">Scan QR</string>
+    <string name="welcome_line">Welcome, please scan a QR code to navigate from your location or tap \"Explore\" to navigate freely.</string>
+    <string name="university">University</string>
+    <string name="building">Building</string>
+    <string name="floor">Floor</string>
+    <string name="destination">Destination</string>
+    <string name="position">Position</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">Ok</string>
+    <string name="change_group_dialog_title">Change University</string>
+    <string name="change_group_dialog_message">Your target is in %1$s.\nNavigate to it?</string>
+    <string name="change_building_dialog_title">Change Building</string>
+    <string name="change_building_dialog_message">Your target is in building: %1$s.\nPlease get there and scan a new QR Code.</string>
+    <string name="change_floor_dialog_title">Change Floor</string>
+    <string name="change_floor_dialog_message">Your target is in floor: %1$d (Current floor is %2$d).\nPlease get there and scan a new QR Code.</string>
+    <string name="faculty_prompt">Choose a faculty</string>
+    <string-array name="faculty_array">
+        <item>Malaysia</item>
+        <item>United States</item>
+        <item>Indonesia</item>
+        <item>France</item>
+        <item>Italy</item>
+        <item>Singapore</item>
+        <item>New Zealand</item>
+        <item>India</item>
+    </string-array>
+</resources>
