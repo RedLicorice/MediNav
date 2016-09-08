@@ -11,26 +11,24 @@ import java.util.List;
  */
 
 public class University {
-    public String getName() {
-        return name;
-    }
 
     private String name ;
-    public List<Building> buildings;
-    public double lat ;
-    public double lng ;
-    public University(String name, double lat, double lng)
+    private List<Building> buildings;
+    private double latitude ;
+    private double longitude ;
+
+    public University(String name, double latitude, double longitude)
     {
         this.name = name;
-        this.lat = lat;
-        this.lng = lng;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
     public University(JSONObject object)
     {
         try {
             name = object.getString("name");
-            this.lat = object.getDouble("lat");
-            this.lng = object.getDouble("lng");
+            latitude = object.getDouble("lat");
+            longitude = object.getDouble("lng");
             JSONArray jsonNodes = object.getJSONArray("buildings");
             buildings = new ArrayList<Building>();
             for (int i=0; i < jsonNodes.length(); i++)
@@ -41,5 +39,37 @@ public class University {
         } catch (org.json.JSONException e){
             e.printStackTrace();
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Building> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(List<Building> buildings) {
+        this.buildings = buildings;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

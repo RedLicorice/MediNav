@@ -11,13 +11,10 @@ import java.util.List;
  */
 
 public class Building {
+
     private String name;
     private List<Floor> floors;
 
-    public Building(String name)
-    {
-        this.name = name;
-    }
     public Building(JSONObject object)
     {
         try {
@@ -42,10 +39,12 @@ public class Building {
     public void setName(String name) {
         this.name = name;
     }
-    public List<Floor> getFloors(){
+
+    public List<Floor> getFloors() {
         return floors;
     }
-    public void setFloors(List<Floor> f ){
-        floors = f;
+
+    public void setFloors(List<Floor> floors) {
+        this.floors = floors;
     }
 }

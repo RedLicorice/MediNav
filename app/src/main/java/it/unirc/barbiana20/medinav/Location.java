@@ -7,20 +7,53 @@ package it.unirc.barbiana20.medinav;
  *  b = Building ID
  *  f = Floor ID
  *  m = Marker ID
- * These information are serialized and used in qrCodes (hence the single-letter variable names),
+ * These information are serialized and used in qrCodes ,
  * as well as used as location information throughout the application.
  */
 
 public class Location {
-    public int u;
-    public int b;
-    public int f;
-    public int m;
-    public Location(int university, int building, int floor, int mark)
+    private int universityId;
+    private int buildingId;
+    private int floorId;
+    private int markId;
+
+    public Location(int universityId, int buildingId, int floorId, int markId)
     {
-        u = university;
-        b = building;
-        f = floor;
-        m = mark;
+        this.universityId = universityId;
+        this.buildingId = buildingId;
+        this.floorId = floorId;
+        this.markId = markId;
+    }
+
+    public int getUniversityId() {
+        return universityId;
+    }
+
+    public void setUniversityId(int universityId) {
+        this.universityId = universityId;
+    }
+
+    public int getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(int buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    public int getFloorId() {
+        return floorId;
+    }
+
+    public void setFloorId(int floorId) {
+        this.floorId = floorId;
+    }
+
+    public int getMarkId() {
+        return markId;
+    }
+
+    public void setMark(int markId) {
+        this.markId = markId;
     }
 }

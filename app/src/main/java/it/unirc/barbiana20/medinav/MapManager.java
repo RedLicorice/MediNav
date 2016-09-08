@@ -14,8 +14,8 @@ import java.util.List;
 
 public class MapManager {
     private List<University> uniList;
-    public MapManager(List<University> l){
-        uniList = l;
+    public MapManager(List<University> uniList){
+        this.uniList = uniList;
     }
     public MapManager(JSONArray jsonarray)
     {
@@ -33,18 +33,18 @@ public class MapManager {
     public University getUniversity(int id){
         return uniList.get(id);
     }
-    public Building getBuilding(Location t){
+
+    public Building getBuilding(Location location){
         try {
-            University u = getUniversity(t.u);
-            if(u == null)
+            University university = getUniversity(location.getUniversityId());
+            if(university == null)
             {
-                Log.e("EROR","university is null!");
+                Log.e("ERROR","university is null!");
             }
-            if(u.buildings == null)
-            {
-                Log.e("EROR","university buildings is null!");
+            if(university.getBuildings().isEmpty()) {
+                Log.e("ERROR", "university buildings is empty!");
             }
-            return u.buildings.get(t.b);
+            return university.getBuildings().get(location.getBuildingId());
         } catch (IndexOutOfBoundsException e)
         {
             e.printStackTrace();
@@ -52,20 +52,20 @@ public class MapManager {
             return null;
         }
     }
-    public Floor getFloor(Location t){
+    public Floor getFloor(Location location){
         try {
-            University u = getUniversity(t.u);
-            if(u == null)
+            University university = getUniversity(location.getUniversityId());
+            if(university == null)
             {
-                Log.e("EROR","university is null!");
+                Log.e("ERROR","university is null!");
             }
-            if(u.buildings == null)
+            if(university.getBuildings().isEmpty())
             {
-                Log.e("EROR","university buildings is null!");
+                Log.e("ERROR","university buildings is empty!");
             }
-            Building b = u.buildings.get(t.b);
-            Floor f = b.getFloors().get(t.f);
-            return f;
+            Building building = university.getBuildings().get(location.getBuildingId());
+            Floor floor = building.getFloors().get(location.getFloorId());
+            return floor;
         } catch (IndexOutOfBoundsException e)
         {
             e.printStackTrace();

@@ -22,7 +22,7 @@ public class MapShow extends CommonActivity {
     private RouteLayer routeLayer;
     private LocationLayer locationLayer;
     //Adapter class instance for using Floor data from MapManager in MapView
-    private FloorAdapter fa;
+    private FloorAdapter floorAdapter;
     //Current position data
     private PointF curPoint;
     private Location curPosition;
@@ -63,12 +63,12 @@ public class MapShow extends CommonActivity {
     {
         try {
             //Load Floor Data
-            Floor f = mm.getFloor(pos);//Get current floor Data from MapManager - It's preloaded at application start!
-            fa = new FloorAdapter(f);//Instantiate the adapter class for MapView
-            Bitmap mapImage = BitmapFactory.decodeStream(getAssets().open(f.getMap()));//Load map image from assets
-            MapUtils.init(fa.getNodeCount(), fa.getEdgeCount());//Initialize MapUtils with current floor graph
+            Floor floor = mm.getFloor(pos);//Get current floor Data from MapManager - It's preloaded at application start!
+            floorAdapter = new FloorAdapter(floor);//Instantiate the adapter class for MapView
+            Bitmap mapImage = BitmapFactory.decodeStream(getAssets().open(floor.getMap()));//Load map image from assets
+            MapUtils.init(floorAdapter.getNodeCount(), floorAdapter.getEdgeCount());//Initialize MapUtils with current floor graph
             //Initialize map view
-            mapView = (com.onlylemi.mapview.library.MapView) findViewById(R.id.mapview);
+            mapView = (MapView) findViewById(R.id.mapview);
             mapView.destroyDrawingCache();
 
             mapView.loadMap(mapImage);
@@ -87,10 +87,10 @@ public class MapShow extends CommonActivity {
                     mapView.addLayer(locationLayer);
                     //Create Route Layer
                     routeLayer = new RouteLayer(mapView);
-                    routeLayer.setNodeList(fa.getNodes());
+                    routeLayer.setNodeList(floorAdapter.getNodes());
                     mapView.addLayer(routeLayer);
                     //Create Mark Layer
-                    markLayer = new MarkLayer(mapView, fa.getMarks(), fa.getMarkNames());
+                    markLayer = new MarkLayer(mapView, floorAdapter.getMarks(), floorAdapter.getMarkNames());
                     //Set Mark click handler, this is called whenever the user taps on a mark
                     markLayer.setMarkIsClickListener(new MarkLayer.MarkIsClickListener() {
                         @Override
@@ -119,9 +119,9 @@ public class MapShow extends CommonActivity {
     /*
      *  Handle position updates in same floor
      */
-    public void UpdateFloorPosition(Location t){
-        curPoint = fa.getMark(t.m);
-        curPosition = t;
+    public void UpdateFloorPosition(Location location){
+        curPoint = floorAdapter.getMark(location.getMarkId());
+        curPosition = location;
         if(locationLayer != null) {
             locationLayer.setCurrentPosition(curPoint);
         }
@@ -134,17 +134,17 @@ public class MapShow extends CommonActivity {
     /*
      * Handle university, building and floor switching, as well as updating user position.
      */
-    public void UpdatePosition(Location t)
+    public void UpdatePosition(Location location)
     {
-        if(curPosition.f != t.f)
-            LoadFloor(t);
-        UpdateFloorPosition(t);//Update position in floor
+        if(curPosition.getFloorId() != location.getFloorId())
+            LoadFloor(location);
+        UpdateFloorPosition(location);//Update position in floor
         ///Update route / building
         //University switching
-        if(curDestination != null && curDestination.u != t.u)
+        if(curDestination != null && curDestination.getUniversityId() != location.getUniversityId())
         {
             //Destination is in another university, show dialog
-            University destUniversity = mm.getUniversity(curDestination.u);
+            University destUniversity = mm.getUniversity(curDestination.getUniversityId());
             AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
             dlgBuilder.setTitle(R.string.change_group_dialog_title);
             dlgBuilder.setMessage(String.format(getResources().getString(R.string.change_group_dialog_message),destUniversity.getName()));
@@ -167,7 +167,7 @@ public class MapShow extends CommonActivity {
             return;
         }
         //Building switching
-        if(curDestination != null && curDestination.b != t.b)
+        if(curDestination != null && curDestination.getBuildingId() != location.getBuildingId())
         {
             //Destination is in another building, show dialog
             Building destBuilding = mm.getBuilding(curDestination);
@@ -186,13 +186,13 @@ public class MapShow extends CommonActivity {
             return;
         }
         //Floor switching
-        if(curDestination != null && curDestination.f != t.f)
+        if(curDestination != null && curDestination.getFloorId() != location.getFloorId())
         {
             if(destStair == null) {
                 //If it's the first scan with a target in different floor, destStair is null
                 //Find nearest waypoint with "stair" attribute and set a route to it.
-                List<PointF> stairMarks = fa.getStairMarks();
-                PointF curMark = fa.getMark(t.m);
+                List<PointF> stairMarks = floorAdapter.getStairMarks();
+                PointF curMark = floorAdapter.getMark(location.getMarkId());
                 destStair = curPoint;//Just for initialization
                 //Min distance in Cartesian plane
                 double min = 0;
@@ -203,17 +203,17 @@ public class MapShow extends CommonActivity {
                         destStair = p;
                     }
                 }
-                List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, fa.getNodes(), fa.getEdges());
+                List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, floorAdapter.getNodes(), floorAdapter.getEdges());
                 routeLayer.setRouteList(routeList);
                 mapView.refresh();
                 return;
             } else if(curPoint == destStair) {
                 //Target has reached dest stair: Invite him to reach correct floor
                 destStair = null;
-                UpdateFloorPosition(t);
+                UpdateFloorPosition(location);
                 AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
                 dlgBuilder.setTitle(R.string.change_floor_dialog_title);
-                dlgBuilder.setMessage(String.format(getResources().getString(R.string.change_floor_dialog_message),curDestination.f,curPosition.f));
+                dlgBuilder.setMessage(String.format(getResources().getString(R.string.change_floor_dialog_message),curDestination.getFloorId(),curPosition.getFloorId()));
                 dlgBuilder.setCancelable(false);
                 dlgBuilder.setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
@@ -224,9 +224,9 @@ public class MapShow extends CommonActivity {
                 AlertDialog alertDialog = dlgBuilder.create();
                 alertDialog.show();
                 return;
-            } else if(fa.getStairMarks().contains(destStair)) {
+            } else if(floorAdapter.getStairMarks().contains(destStair)) {
                 //Target has reached another QRCode in same floor
-                List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, fa.getNodes(), fa.getEdges());
+                List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, floorAdapter.getNodes(), floorAdapter.getEdges());
                 routeLayer.setRouteList(routeList);
                 mapView.refresh();
             }
@@ -268,14 +268,14 @@ public class MapShow extends CommonActivity {
                 Log.d("Scan result", re);
                 log.setText("Scanned: " + re + "\n");
                 //Data in QRCodes will be stored in json format, since it is human readable (easier generation)
-                Location t = ParseTarget(re);
+                Location location = ParseTarget(re);
                 //ToDo: Floor and building changing
 
-                UpdatePosition(t);
+                UpdatePosition(location);
                 //mapView.setCurrentZoom(1.5F, curPoint.x, curPoint.y);
 
-                log.append("Current Waypoint: " + fa.getMarkName(t.m) + "\n");
-                log.append(">x:" + fa.getMark(t.m).x + " y:" + fa.getMark(t.m).y + "\n");
+                log.append("Current Waypoint: " + floorAdapter.getMarkName(location.getMarkId()) + "\n");
+                log.append(">x:" + floorAdapter.getMark(location.getMarkId()).x + " y:" + floorAdapter.getMark(location.getMarkId()).y + "\n");
             } else {
                 log.setText("scanResult is NULL!");
             }
