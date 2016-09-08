@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Medinav</string>
+    <string name ="choose_faculty_button">Choose</string>
+    <string name="choose_faculty">Please choose a faculty from the list below</string>
     <string name="permission_error_title">Permission Required</string>
     <string name="permission_error">To work correctly this app requires permission to use camera.</string>
     <string name="choose_destination">Please choose faculty and destination</string>
@@ -22,10 +24,4 @@
     <string name="change_building_dialog_message">Your target is in building: %1$s.\nPlease get there and scan a new QR Code.</string>
     <string name="change_floor_dialog_title">Change Floor</string>
     <string name="change_floor_dialog_message">Your target is in floor: %1$d (Current floor is %2$d).\nPlease get there and scan a new QR Code.</string>
-    <string name="faculty_prompt">Choose a faculty</string>
-    <string-array name="faculty_array">
-        <item>Ingegneria</item>
-        <item>Agraria</item>
-        <item>Architettura</item>
-    </string-array>
 </resources>
