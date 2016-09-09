@@ -21,7 +21,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MapShow" />
-        <activity android:name=".ChoosePosition"></activity>
+        <activity android:name=".ChooseFaculty"></activity>
+        <activity android:name=".ChooseDestination"></activity>
     </application>
 
 </manifest>

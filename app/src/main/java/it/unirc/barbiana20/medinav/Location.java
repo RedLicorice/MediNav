@@ -16,6 +16,7 @@ public class Location {
     private int buildingId;
     private int floorId;
     private int markId;
+    private String name;
 
     public Location(int universityId, int buildingId, int floorId, int markId)
     {
@@ -55,5 +56,13 @@ public class Location {
 
     public void setMark(int markId) {
         this.markId = markId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
