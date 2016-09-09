@@ -65,4 +65,6 @@ public class Location {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String jsonSerialize() {return String.format("\"u\":$1%d,\"b\":$2%d,\"f\":$3%d,\"m\":$4%d}",universityId,buildingId,floorId,markId); }
 }
