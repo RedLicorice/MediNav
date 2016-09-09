@@ -23,10 +23,19 @@ import java.util.List;
 public class MarkLayer extends MapBaseLayer {
 
     private List<PointF> marks;
+    private List<PointF> endPoints;//Used to show a different icon for endpoints
+    public void setEndPoints(List<PointF> ep)
+    {
+        endPoints = ep;
+    }
+    private boolean isEndPoint(PointF p)
+    {
+        return (endPoints != null) ? endPoints.contains(p) : false;
+    }
     private List<String> marksName;
     private MarkIsClickListener listener;
 
-    private Bitmap bmpMark, bmpMarkTouch;
+    private Bitmap bmpMark, bmpMarkTouch, bmpEndpoint;
 
     private float radiusMark;
     private boolean isClickMark = false;
@@ -51,6 +60,7 @@ public class MarkLayer extends MapBaseLayer {
 
         bmpMark = BitmapFactory.decodeResource(mapView.getResources(), R.mipmap.mark);
         bmpMarkTouch = BitmapFactory.decodeResource(mapView.getResources(), R.mipmap.mark_touch);
+        bmpEndpoint = BitmapFactory.decodeResource(mapView.getResources(), R.mipmap.endpoint);
 
         paint = new Paint();
         paint.setAntiAlias(true);
@@ -104,8 +114,9 @@ public class MarkLayer extends MapBaseLayer {
                                 radiusMark / 2, paint);
                     }
                     //mark ico
-                    canvas.drawBitmap(bmpMark, goal[0] - bmpMark.getWidth() / 2,
-                            goal[1] - bmpMark.getHeight() / 2, paint);
+                    Bitmap bmpDraw = isEndPoint(mark) ? bmpEndpoint : bmpMark;
+                    canvas.drawBitmap(bmpDraw, goal[0] - bmpDraw.getWidth() / 2,
+                            goal[1] - bmpDraw.getHeight() / 2, paint);
                     if (i == num && isClickMark) {
                         canvas.drawBitmap(bmpMarkTouch, goal[0] - bmpMarkTouch.getWidth() / 2,
                                 goal[1] - bmpMarkTouch.getHeight(), paint);

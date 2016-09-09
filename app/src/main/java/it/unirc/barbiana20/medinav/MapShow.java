@@ -82,7 +82,6 @@ public class MapShow extends CommonActivity {
                 public void onMapLoadSuccess() {
                     //Create Location Layer
                     locationLayer = new LocationLayer(mapView, curPoint);
-                    mapView.setCurrentZoom(3,curPoint.x, curPoint.y);
                     locationLayer.setOpenCompass(false);
                     mapView.addLayer(locationLayer);
                     //Create Route Layer
@@ -91,6 +90,7 @@ public class MapShow extends CommonActivity {
                     mapView.addLayer(routeLayer);
                     //Create Mark Layer
                     markLayer = new MarkLayer(mapView, floorAdapter.getMarks(), floorAdapter.getMarkNames());
+                    markLayer.setEndPoints(floorAdapter.getEndMarks());
                     //Set Mark click handler, this is called whenever the user taps on a mark
                     markLayer.setMarkIsClickListener(new MarkLayer.MarkIsClickListener() {
                         @Override
@@ -234,18 +234,6 @@ public class MapShow extends CommonActivity {
 
     }
 
-    public void translateTestX(View v){
-        TextView log = (TextView) findViewById(R.id.log_viewer);
-        log.append("x + 10");
-        mapView.translate(10, 0);
-        mapView.refresh();
-    }
-    public void translateTestY(View v){
-        TextView log = (TextView) findViewById(R.id.log_viewer);
-        log.append("y + 10");
-        mapView.translate(0,10);
-        mapView.refresh();
-    }
     public void resetMap(View v){
         TextView log = (TextView) findViewById(R.id.log_viewer);
         log.append("Reset Map");
@@ -261,23 +249,15 @@ public class MapShow extends CommonActivity {
             TextView log = (TextView) findViewById(R.id.log_viewer);
             if (scanResult != null) {
                 String re = scanResult.getContents();
-                if(re == null) {
+                if (re == null) {
                     //Scan aborted or not succesful
                     return;
                 }
-                Log.d("Scan result", re);
-                log.setText("Scanned: " + re + "\n");
                 //Data in QRCodes will be stored in json format, since it is human readable (easier generation)
                 Location location = ParseTarget(re);
-                //ToDo: Floor and building changing
-
                 UpdatePosition(location);
-                //mapView.setCurrentZoom(1.5F, curPoint.x, curPoint.y);
-
-                log.append("Current Waypoint: " + floorAdapter.getMarkName(location.getMarkId()) + "\n");
-                log.append(">x:" + floorAdapter.getMark(location.getMarkId()).x + " y:" + floorAdapter.getMark(location.getMarkId()).y + "\n");
             } else {
-                log.setText("scanResult is NULL!");
+                Log.d("Error","Scan result is null!");
             }
         } catch(NullPointerException e)
         {
