@@ -47,11 +47,13 @@ public class MapShow extends CommonActivity {
         //Grab user-choosen destination from caller intent
         String destTarget = getIntent().getStringExtra("TARGET_POSITION");
         if(destTarget != null){
+            Log.d("Received Destination",destTarget);
             curDestination = ParseTarget(destTarget);
         }
         //Grab starting point from caller intent (User has to scan a QRCode before navigation starts)
         String qrData = getIntent().getStringExtra("CURRENT_POSITION");
         if(qrData != null){
+            Log.d("Received Position",qrData);
             curPosition = ParseTarget(qrData);
             //Load current floor map
             LoadFloor(curPosition);
@@ -157,6 +159,10 @@ public class MapShow extends CommonActivity {
         }
         UpdateFloorPosition(location);//Update position in floor
         routeLayer.setRouteList(null);
+        if(curDestination != null){
+            Log.d("Navigate-Dest:",curDestination.jsonSerialize());
+            Toast.makeText(getApplicationContext(),"[DEBUG]Destination set!",Toast.LENGTH_LONG).show();
+        }
         ///Update route / building
         //curDestination = new Location(0,0,4,0);
         //Target is in different university
@@ -207,8 +213,10 @@ public class MapShow extends CommonActivity {
         //Target is in different floor
         if(curDestination != null && curDestination.getFloorId() != location.getFloorId())
         {
-            if(destStair != null && curPoint.equals(destStair)) {
-                //Target has reached dest stair: Invite him to reach correct floor
+            Floor f = mm.getFloor(location);
+            Mark m = f.marks.get(location.getMarkId());
+            if(destStair != null && curPoint.equals(destStair) || m.isStair()) {
+                //Target has reached a stair: Invite him to reach correct floor
                 destStair = null;
                 UpdateFloorPosition(location);
                 AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
@@ -228,8 +236,7 @@ public class MapShow extends CommonActivity {
                 //If it's the first scan with a target in different floor, destStair is null
                 //Find nearest waypoint with "stair" attribute and set a route to it.
                 List<PointF> stairMarks = floorAdapter.getStairMarks();
-                Floor f = mm.getFloor(location);
-                Mark m = f.marks.get(location.getMarkId());
+
                 destStair = curPoint;//We assume user is on a stair. If he is not...
                 if(!m.isStair())//we find the closest stair, and set it as our destination..
                 {
@@ -243,6 +250,8 @@ public class MapShow extends CommonActivity {
                     }
                     List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, floorAdapter.getNodes(), floorAdapter.getEdges());
                     routeLayer.setRouteList(routeList);
+                } else {
+                    Toast.makeText(getApplicationContext(),"You already are on a stair!",Toast.LENGTH_LONG).show();
                 }
                 mapView.refresh();
                 return;
@@ -264,10 +273,10 @@ public class MapShow extends CommonActivity {
 
     public void resetMap(View v){
         TextView log = (TextView) findViewById(R.id.log_viewer);
-        log.append("Reset Map");
         mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
         //mapView.setCurrentZoom(3,curPoint.x, curPoint.y);
         mapView.refresh();
+        Toast.makeText(getApplicationContext(),"Map reset!",Toast.LENGTH_SHORT).show();
     }
     //QRCode scan callback
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
