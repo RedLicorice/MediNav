@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.onlylemi.mapview.library.MapView;
@@ -70,6 +71,15 @@ public class RouteLayer extends MapBaseLayer {
             if (!routeList.isEmpty() && !nodeList.isEmpty()) {
                 // draw route
                 for (int i = 0; i < routeList.size() - 1; i++) {
+                    if( routeList.size() <= i ) {
+                        Log.e("MapView Library","RouteList Index out of bounds!");
+                    }
+                    if( nodeList.size() <= routeList.get(i) ) {
+                        Log.e("MapView Library","NodeList Index out of bounds!");
+                    }
+                    if( nodeList.size() <= routeList.get(i)+1 ) {
+                        Log.e("MapView Library","NodeList Index out of bounds +1!");
+                    }
                     float[] goal1 = {nodeList.get(routeList.get(i)).x,
                             nodeList.get(routeList.get(i)).y};
                     float[] goal2 = {nodeList.get(routeList.get(i + 1)).x,

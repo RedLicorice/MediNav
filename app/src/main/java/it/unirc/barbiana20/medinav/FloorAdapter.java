@@ -28,6 +28,7 @@ public class FloorAdapter {
         }
         marks = new ArrayList<PointF>();
         stairMarks = new ArrayList<PointF>();
+        endMarks = new ArrayList<PointF>();
         markNames = new ArrayList<String>();
         for(Mark m : f.marks)
         {

@@ -3,6 +3,7 @@ package com.onlylemi.mapview.library;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Picture;
 import android.graphics.PointF;
@@ -125,8 +126,10 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
         if (holder != null) {
             canvas = holder.lockCanvas();
             if (canvas != null) {
-                canvas.drawColor(-1);
+                canvas.drawColor(Color.WHITE);
                 if (isMapLoadFinish) {
+                    if(mapLayer != null)
+                        mapLayer.draw(canvas, currentMatrix, currentZoom, currentRotateDegrees);
                     for (MapBaseLayer layer : layers) {
                         if (layer.isVisible) {
                             layer.draw(canvas, currentMatrix, currentZoom, currentRotateDegrees);
@@ -157,7 +160,7 @@ public class MapView extends SurfaceView implements SurfaceHolder.Callback {
                     if (mapLayer == null) {
                         mapLayer = new MapLayer(MapView.this);
                         // add map image layer
-                        layers.add(mapLayer);
+                        //layers.add(mapLayer);
                     }
                     mapLayer.setImage(picture);
                     if (mapViewListener != null) {
