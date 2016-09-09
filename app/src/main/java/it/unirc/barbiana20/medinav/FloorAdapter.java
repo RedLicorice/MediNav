@@ -13,6 +13,7 @@ public class FloorAdapter {
     private List<PointF> nodes;
     private List<PointF> edges;
     private List<PointF> marks;
+    private List<PointF> endMarks;
     private List<String> markNames;
     private List<PointF> stairMarks;
     public FloorAdapter(Floor f){
@@ -34,6 +35,8 @@ public class FloorAdapter {
             markNames.add(m.id,m.name);
             if(m.isStair())
                 stairMarks.add(m.pos);
+            if(m.type == 0)
+                endMarks.add(m.pos);
         }
     }
     public List<PointF> getNodes(){
@@ -53,6 +56,9 @@ public class FloorAdapter {
     }
     public List<PointF> getStairMarks(){
         return stairMarks;
+    }
+    public List<PointF> getEndMarks(){
+        return endMarks;
     }
     public List<String> getMarkNames(){
         return markNames;
