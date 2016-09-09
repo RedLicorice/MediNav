@@ -158,7 +158,7 @@ public class MapShow extends CommonActivity {
         UpdateFloorPosition(location);//Update position in floor
         routeLayer.setRouteList(null);
         ///Update route / building
-        curDestination = new Location(0,0,4,0);
+        //curDestination = new Location(0,0,4,0);
         //Target is in different university
         if(curDestination != null && curDestination.getUniversityId() != location.getUniversityId())
         {
