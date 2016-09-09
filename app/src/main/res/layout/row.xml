@@ -13,4 +13,12 @@
         android:textSize="22dip"
         android:layout_weight="0.10" />
 
+    <TextView
+        android:id="@+id/listview_list_2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="" android:padding="10dip"
+        android:textSize="22dip"
+        android:layout_weight="0.10" />
+
 </LinearLayout>

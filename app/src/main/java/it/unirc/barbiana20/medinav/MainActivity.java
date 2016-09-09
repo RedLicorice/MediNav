@@ -28,7 +28,7 @@ public class MainActivity extends CommonActivity {
     //If user wants to navigate freely, he has to manually enter position.
     //Otherwise, QRScan (Inherited from CommonActivity) will be run.
     public void navigate(View view) {
-        Intent intent = new Intent(this, ChoosePosition.class);
+        Intent intent = new Intent(this, ChooseFaculty.class);
         startActivity(intent);
     }
     //Retrieve QRCode scan result and pass it to MapShow Activity
