@@ -20,7 +20,7 @@ import java.io.*;
  */
 
 public class CommonActivity extends AppCompatActivity {
-    public static MapManager mm;
+    protected static MapManager mm;
     private boolean isMMInit = false;
     public void InitMapManager(){
         //Load map data from assets - contains data for ALL maps

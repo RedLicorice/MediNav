@@ -17,10 +17,21 @@ public class MapManager {
     public MapManager(List<University> uniList){
         this.uniList = uniList;
     }
+
+    public void setUniList(List<University> uniList) {
+        this.uniList = uniList;
+    }
+
+    public List<University> getUniList() {
+
+        return uniList;
+    }
+
     public MapManager(JSONArray jsonarray)
     {
         try {
             uniList = new ArrayList<University>();
+
             for (int i = 0; i < jsonarray.length(); i++) {
                 JSONObject jsonUniversity = jsonarray.getJSONObject(i);
                 uniList.add(new University(jsonUniversity));
