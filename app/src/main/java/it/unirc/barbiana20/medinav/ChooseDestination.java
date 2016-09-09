@@ -26,10 +26,7 @@ public class ChooseDestination extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_destination);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        initToolbar();
         final ListView listView = (ListView) findViewById(R.id.listview_2);
         Intent universityChosenIntent = getIntent();
         int idUniversityChosen =  universityChosenIntent.getIntExtra("idUniversityChosen", 0);

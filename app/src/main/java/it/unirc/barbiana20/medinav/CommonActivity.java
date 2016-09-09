@@ -1,6 +1,7 @@
 package it.unirc.barbiana20.medinav;
 
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
@@ -50,6 +51,12 @@ public class CommonActivity extends AppCompatActivity {
             isMMInit = false;
             Log.e("MapData","Json ERROR!!");
         }
+    }
+
+    public void initToolbar(){
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     public void initiateQRScan(){

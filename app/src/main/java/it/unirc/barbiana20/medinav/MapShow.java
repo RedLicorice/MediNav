@@ -40,8 +40,7 @@ public class MapShow extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_show);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
+        initToolbar();
         curPoint = new PointF(0,0);//Current position in floor is initialized to 0,0
         InitMapView();//Initialize position - independent attributes
         //Grab user-choosen destination from caller intent

@@ -16,10 +16,7 @@ public class ChooseFaculty extends CommonActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_faculty);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
+        initToolbar();
         final ListView listView = (ListView) findViewById(R.id.listview);
         List<University> uniList = mm.getUniList();
         String[] uniArray = new String[uniList.size()];
