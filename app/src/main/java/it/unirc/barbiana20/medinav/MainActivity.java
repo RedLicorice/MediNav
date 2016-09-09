@@ -22,6 +22,7 @@ public class MainActivity extends CommonActivity {
         setContentView(R.layout.activity_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         CheckPermissions();
         InitMapManager();
     }

@@ -28,6 +28,7 @@ public class ChooseDestination extends CommonActivity {
         setContentView(R.layout.activity_choose_destination);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         final ListView listView = (ListView) findViewById(R.id.listview_2);
         Intent universityChosenIntent = getIntent();
