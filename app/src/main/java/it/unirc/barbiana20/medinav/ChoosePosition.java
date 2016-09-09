@@ -21,10 +21,10 @@ public class ChoosePosition extends CommonActivity  {
         List<University> uniList = mm.getUniList();
         String[] uniArray = new String[uniList.size()];
         for(int i=0; i<uniList.size(); i++){
-            uniArray[i] = uniList[i].getName();
+            uniArray[i] = uniList.get(i).getName();
         }
         ArrayAdapter<String> arrayAdapter =
-                new ArrayAdapter<String>(this, R.layout.row, R.id.listview_list, array);
+                new ArrayAdapter<String>(this, R.layout.row, R.id.listview_list, uniArray);
         listView.setAdapter(arrayAdapter);
     }
 
