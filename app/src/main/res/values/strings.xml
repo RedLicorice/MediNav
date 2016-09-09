@@ -6,7 +6,7 @@
     <string name="permission_error">To work correctly this app requires permission to use camera.</string>
     <string name="qr_scan">Scan QR Code for next location</string>
     <string name="button_send">Send</string>
-    <string name="button_navigate">Explore</string>
+    <string name="button_navigate">Navigate</string>
     <string name="button_scan_qr">Scan QR</string>
     <string name="welcome_line">Welcome, please scan a QR code to navigate from your location or tap \"Explore\" to navigate freely.</string>
     <string name="university">University</string>
