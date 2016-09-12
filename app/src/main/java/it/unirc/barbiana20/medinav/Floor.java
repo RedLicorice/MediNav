@@ -61,6 +61,9 @@ public class Floor {
         data = d;
     }
 
+    public Mark getMark(int id){
+        return marks.get(id);
+    }
     public Floor(JSONObject object){
         try {
             level = object.getInt("level");

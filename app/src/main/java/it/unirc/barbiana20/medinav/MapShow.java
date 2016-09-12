@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.content.*;
 import android.graphics.*;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -270,19 +269,19 @@ public class MapShow extends CommonActivity {
         }
     }
 
+    /*
+    //the relevant button is removed
     public void resetMap(View v){
         TextView log = (TextView) findViewById(R.id.log_viewer);
         mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
         //mapView.setCurrentZoom(3,curPoint.x, curPoint.y);
         mapView.refresh();
         Toast.makeText(getApplicationContext(),"Map reset!",Toast.LENGTH_SHORT).show();
-    }
+    }*/
     //QRCode scan callback
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         try {
-            //ToDo:Handle user cancels scan
             IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-            TextView log = (TextView) findViewById(R.id.log_viewer);
             if (scanResult != null) {
                 String re = scanResult.getContents();
                 if (re == null) {

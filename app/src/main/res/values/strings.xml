@@ -1,14 +1,14 @@
 <resources>
-    <string name="app_name">Medinav</string>
-    <string name ="choose_destination">Choose a destination from the list below</string>
+    <string name="app_name">MediNav</string>
+    <string name="choose_destination">Choose a destination from the list below</string>
     <string name="choose_faculty">Please choose a faculty from the list below</string>
     <string name="permission_error_title">Permission Required</string>
     <string name="permission_error">To work correctly this app requires permission to use camera.</string>
     <string name="qr_scan">Scan QR Code for next location</string>
     <string name="button_send">Send</string>
     <string name="button_navigate">Navigate</string>
-    <string name="button_scan_qr">Scan QR</string>
-    <string name="welcome_line">Welcome, please scan a QR code to navigate from your location or tap \"Explore\" to navigate freely.</string>
+    <string name="button_explore">Explore</string>
+    <string name="welcome_line">Welcome, please tap \"Navigate\" to navigate from your location or tap \"Explore\" to explore the map.</string>
     <string name="university">University</string>
     <string name="building">Building</string>
     <string name="floor">Floor</string>

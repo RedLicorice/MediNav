@@ -24,10 +24,20 @@ public class MainActivity extends CommonActivity {
         CheckPermissions();
         InitMapManager();
     }
-    //If user wants to navigate freely, he has to manually enter position.
-    //Otherwise, QRScan (Inherited from CommonActivity) will be run.
-    public void navigate(View view) {
+    // Navigate button handler
+    // User will be asked to choose  destination and then scan a QRCode,
+    // A path will then be generated for the selected destination.
+    public void onNavigate(View view) {
         Intent intent = new Intent(this, ChooseFaculty.class);
+        startActivity(intent);
+    }
+    //Explore button handler
+    // User will be asked to choose a starting point (or scan a QR Code)
+    // the map will then be shown.
+    public void onExplore(View view) {
+        //ToDO: Implement free xploration
+        Intent intent = new Intent(this, ChooseFaculty.class);
+        intent.putExtra("MODE",true);
         startActivity(intent);
     }
     //Retrieve QRCode scan result and pass it to MapShow Activity

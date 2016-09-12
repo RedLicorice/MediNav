@@ -85,6 +85,9 @@ public class MapManager {
         }
     }
     public List<Location> getLocations(int universityId){
+        return getLocations(universityId,false);
+    }
+    public List<Location> getLocations(int universityId, boolean all){
         List<Location> res = new ArrayList<Location>();
         University cUniversity = getUniversity(universityId);
         for(int buildingId = 0; buildingId < cUniversity.getBuildings().size(); buildingId++)
@@ -94,7 +97,7 @@ public class MapManager {
                 Floor cFloor = cBuilding.getFloors().get(floorId);
                 for(int markId = 0; markId < cFloor.marks.size(); markId++){
                     Mark cMark = cFloor.marks.get(markId);
-                    if(cMark.type == 0) {
+                    if(all || cMark.type == 0) {
                         Location loc = new Location(universityId, buildingId, floorId, markId);
                         loc.setName(cMark.name);
                         res.add(loc);

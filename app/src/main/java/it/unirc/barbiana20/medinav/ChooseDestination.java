@@ -2,7 +2,6 @@ package it.unirc.barbiana20.medinav;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,7 +26,7 @@ public class ChooseDestination extends CommonActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_destination);
         initToolbar();
-        final ListView listView = (ListView) findViewById(R.id.listview_2);
+        final ListView listView = (ListView) findViewById(R.id.destinationList);
         Intent universityChosenIntent = getIntent();
         int idUniversityChosen =  universityChosenIntent.getIntExtra("idUniversityChosen", 0);
         final List<Location> locationList = mm.getLocations(idUniversityChosen);
