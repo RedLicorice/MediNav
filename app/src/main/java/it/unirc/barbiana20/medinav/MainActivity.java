@@ -35,44 +35,21 @@ public class MainActivity extends CommonActivity {
     // User will be asked to choose a starting point (or scan a QR Code)
     // the map will then be shown.
     public void onExplore(View view) {
-        //ToDO: Implement free xploration
         Intent intent = new Intent(this, ChooseFaculty.class);
         intent.putExtra("MODE",true);
         startActivity(intent);
     }
-    //Retrieve QRCode scan result and pass it to MapShow Activity
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
-            String re = scanResult.getContents();
-            if(re != null) {
-                Log.d("Scanned code:", re);
-                Intent intent2 = new Intent(this, MapShow.class);
-                intent2.putExtra("CURRENT_POSITION", re);
-                startActivity(intent2);
-            }
-        } else {
-            //Show error
-            Log.d("Error scanning code!","");
-        }
 
-    }
-
+    //Check if user has granted permission to use camera. (This is Asynchronous)
     public void CheckPermissions(){
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            /*if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {*/
                  ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA},
                         1);
-            //}
         }
     }
+    //Handle permission request results: being the app camera-based, in case the user denies permission
+    //to use camera, it will exit.
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {

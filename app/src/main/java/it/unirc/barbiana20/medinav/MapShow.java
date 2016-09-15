@@ -1,12 +1,11 @@
 package it.unirc.barbiana20.medinav;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.content.*;
 import android.graphics.*;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.*;
@@ -122,12 +121,21 @@ public class MapShow extends CommonActivity {
 
                 @Override
                 public void onMapLoadFail() {
-                    //ToDo: Handle map loading failure (Fatal error!)
+                    AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(getApplicationContext());
+                    dlgBuilder.setTitle(R.string.map_loading_error_title);
+                    dlgBuilder.setMessage(R.string.map_loading_error);
+                    dlgBuilder.setCancelable(false);
+                    dlgBuilder.setPositiveButton(R.string.ok,new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+                            System.exit(0);
+                        }
+                    });
+                    AlertDialog alertDialog = dlgBuilder.create();
+                    alertDialog.show();
                 }
 
             });
-
-            Toast.makeText(getApplicationContext(),"Map Loaded!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),R.string.map_loaded,Toast.LENGTH_SHORT).show();
         } catch(IOException e){
             e.printStackTrace();
         } catch(NullPointerException e){
@@ -145,11 +153,12 @@ public class MapShow extends CommonActivity {
         }
         mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
         mapView.refresh();
-        Toast.makeText(getApplicationContext(),"Floor Position Updated!",Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),R.string.position_updated,Toast.LENGTH_SHORT).show();
     }
     /*
      * Handle university, building and floor switching, as well as updating user position.
      */
+    private Uri changeUniIntentUri;
     public void UpdatePosition(Location location)
     {
         if(curPosition.getFloorId() != location.getFloorId()) {
@@ -159,7 +168,7 @@ public class MapShow extends CommonActivity {
         routeLayer.setRouteList(null);
         if(curDestination != null){
             Log.d("Navigate-Dest:",curDestination.jsonSerialize());
-            Toast.makeText(getApplicationContext(),"[DEBUG]Destination set!",Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(),"[DEBUG]Destination set!",Toast.LENGTH_LONG).show();
         }
         ///Update route / building
         //curDestination = new Location(0,0,4,0);
@@ -168,13 +177,23 @@ public class MapShow extends CommonActivity {
         {
             //Destination is in another university, show dialog
             University destUniversity = mm.getUniversity(curDestination.getUniversityId());
+            String lat = String.format("%.6f",destUniversity.getLatitude()).replace(',','.');
+            String lng = String.format("%.6f",destUniversity.getLongitude()).replace(',','.');
+            changeUniIntentUri = Uri.parse("geo:"+ lat+","+lng+"?q="+lat+","+lng);
+            Log.d("Navigation URI",changeUniIntentUri.toString());
             AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
             dlgBuilder.setTitle(R.string.change_group_dialog_title);
             dlgBuilder.setMessage(String.format(getResources().getString(R.string.change_group_dialog_message),destUniversity.getName()));
             dlgBuilder.setCancelable(false);
             dlgBuilder.setPositiveButton(R.string.yes,new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
-                    //ToDo: Navigate from current university to destination university (through GMaps)
+                    Intent mapIntent = new Intent(Intent.ACTION_VIEW, changeUniIntentUri);
+                    //mapIntent.setPackage("com.google.android.apps.maps");
+                    if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(mapIntent);
+                    } else {
+                        Toast.makeText(getApplicationContext(),R.string.no_compatible_app,Toast.LENGTH_LONG).show();
+                    }
                     dialog.cancel();
                 }
             });
@@ -269,15 +288,6 @@ public class MapShow extends CommonActivity {
         }
     }
 
-    /*
-    //the relevant button is removed
-    public void resetMap(View v){
-        TextView log = (TextView) findViewById(R.id.log_viewer);
-        mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
-        //mapView.setCurrentZoom(3,curPoint.x, curPoint.y);
-        mapView.refresh();
-        Toast.makeText(getApplicationContext(),"Map reset!",Toast.LENGTH_SHORT).show();
-    }*/
     //QRCode scan callback
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         try {

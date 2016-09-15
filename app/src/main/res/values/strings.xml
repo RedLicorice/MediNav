@@ -4,11 +4,14 @@
     <string name="choose_faculty">Please choose a faculty from the list below</string>
     <string name="permission_error_title">Permission Required</string>
     <string name="permission_error">To work correctly this app requires permission to use camera.</string>
+    <string name="map_loading_error_title">Load error</string>
+    <string name="map_loading_error">Map loading failed!</string>
     <string name="qr_scan">Scan QR Code for next location</string>
     <string name="button_send">Send</string>
     <string name="button_navigate">Navigate</string>
     <string name="button_explore">Explore</string>
     <string name="welcome_line">Welcome, please tap \"Navigate\" to navigate from your location or tap \"Explore\" to explore the map.</string>
+    <string name="no_compatible_app">No compatible application found!</string>
     <string name="university">University</string>
     <string name="building">Building</string>
     <string name="floor">Floor</string>
@@ -17,6 +20,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Ok</string>
+    <string name='map_loaded'>Map loaded!</string>
+    <string name="position_updated">Position Updated</string>
     <string name="change_group_dialog_title">Change University</string>
     <string name="change_group_dialog_message">Your target is in %1$s.\nNavigate to it?</string>
     <string name="change_building_dialog_title">Change Building</string>
