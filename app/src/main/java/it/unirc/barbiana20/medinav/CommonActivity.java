@@ -1,5 +1,6 @@
 package it.unirc.barbiana20.medinav;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -47,6 +48,16 @@ public class CommonActivity extends AppCompatActivity {
             mm = null;
             Log.e("MapData","Json ERROR!!");
         }
+    }
+
+    //Launch MarkCard Activity
+    public void LaunchMarkCard(Mark markToLaunch){
+        if(markToLaunch.cardDesc == null || markToLaunch.cardDesc == "")
+            return;
+        Intent launchIntent = new Intent(this, MarkCard.class);
+        launchIntent.putExtra("CARD_IMAGE", markToLaunch.cardImage);
+        launchIntent.putExtra("CARD_DESC", markToLaunch.cardDesc);
+        startActivity(launchIntent);
     }
 
     public void initToolbar(){

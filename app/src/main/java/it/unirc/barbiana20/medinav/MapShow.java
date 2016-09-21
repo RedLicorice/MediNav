@@ -292,15 +292,6 @@ public class MapShow extends CommonActivity {
         }
     }
 
-    //Launch MarkCard Activity
-    public void LaunchMarkCard(Mark markToLaunch){
-        if(markToLaunch.cardDesc == null )
-            return;
-        Intent launchIntent = new Intent(this, MarkCard.class);
-        launchIntent.putExtra("CARD_IMAGE", markToLaunch.cardImage);
-        launchIntent.putExtra("CARD_DESC", markToLaunch.cardDesc);
-        startActivity(launchIntent);
-    }
     //QRCode scan callback
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         try {

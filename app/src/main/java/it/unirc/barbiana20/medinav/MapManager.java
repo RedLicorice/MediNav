@@ -101,7 +101,7 @@ public class MapManager {
                 Floor cFloor = cBuilding.getFloors().get(floorId);
                 for(int markId = 0; markId < cFloor.marks.size(); markId++){
                     Mark cMark = cFloor.marks.get(markId);
-                    if(all || cMark.type != Mark.Types.Waypoint) {
+                    if((all || cMark.type != Mark.Types.Waypoint) && cMark.name != ""){
                         Location loc = new Location(universityId, buildingId, floorId, markId);
                         loc.setName(cMark.name);
                         res.add(loc);
