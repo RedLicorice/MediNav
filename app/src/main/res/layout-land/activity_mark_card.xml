@@ -17,7 +17,7 @@
     <!--include layout="@layout/toolbar" /-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="64dp"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -37,8 +37,8 @@
             android:textColor="#fff" />
     </android.support.v7.widget.Toolbar>
     <ImageView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/cardImage"
         app:srcCompat="@drawable/no_image"
         android:background="@drawable/no_image"
