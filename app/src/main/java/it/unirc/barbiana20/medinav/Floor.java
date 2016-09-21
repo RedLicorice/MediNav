@@ -106,6 +106,8 @@ public class Floor {
                 PointF markPoint = new PointF(Float.parseFloat(strCoords[0]),Float.parseFloat(strCoords[1]));
                 String markName = jsonMark.getString("name");
                 Mark m = new Mark(markID,markName,markPoint,markType);
+                m.cardDesc = jsonMark.getString("cardDesc");
+                m.cardImage = jsonMark.getString("cardImage");
                 marks.add(m.id,m);
             }
         } catch (org.json.JSONException e){

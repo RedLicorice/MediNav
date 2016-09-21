@@ -13,6 +13,8 @@ public class Mark {
     public int id;
     public String name;
     public Types type;
+    public String cardImage;
+    public String cardDesc;
     public Mark(int i, String n, PointF p, int t){
         pos = p;
         id = i;

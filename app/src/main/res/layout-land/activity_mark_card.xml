@@ -17,13 +17,13 @@
     <!--include layout="@layout/toolbar" /-->
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="64dp"
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent">
         <TextView
             android:text="@string/app_name"
@@ -37,33 +37,34 @@
             android:textColor="#fff" />
     </android.support.v7.widget.Toolbar>
     <ImageView
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         android:id="@+id/cardImage"
         app:srcCompat="@drawable/no_image"
         android:background="@drawable/no_image"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         android:contentDescription="@string/no_image"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:layout_marginStart="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp" />
+        android:cropToPadding="false"
+        android:adjustViewBounds="false"
+        app:layout_constraintRight_toLeftOf="@+id/guideline" />
+
     <ScrollView
         android:id="@+id/cardScroller"
-        android:layout_height="0dp"
         android:scrollbars="vertical"
         android:fillViewport="true"
         android:layout_width="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:layout_marginEnd="16dp"
+        android:layout_height="wrap_content"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/cardImage"
-        android:layout_marginStart="8dp">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp">
         <TextView
             android:layout_height="wrap_content"
             android:id="@+id/cardDesc"
@@ -72,9 +73,17 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            android:layout_width="fill_parent" />
+            android:layout_width="fill_parent"/>
     </ScrollView>
 
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        app:layout_constraintGuide_begin="351dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="351dp" />
 
 
 </android.support.constraint.ConstraintLayout>

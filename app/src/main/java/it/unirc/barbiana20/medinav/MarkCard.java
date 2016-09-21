@@ -2,30 +2,32 @@ package it.unirc.barbiana20.medinav;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
 
-public class EndpointDetails extends CommonActivity {
+public class MarkCard extends CommonActivity {
 
     Location curLoc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_endpoint_details);
+        setContentView(R.layout.activity_mark_card);
         initToolbar();
         Intent callerIntent = getIntent();
-        String serializedLocation = callerIntent.getStringExtra("LOCATION");
-        if(serializedLocation == null){
-            Log.e("CardInit","Location not received!");
-            this.finish();//Exit activity
+        String imagePath = callerIntent.getStringExtra("CARD_IMAGE");
+        String desc = callerIntent.getStringExtra("CARD_DESC");
+        if(imagePath != null) {
+            Log.d("MarkCard","Setting image path "+imagePath);
+            setImage(imagePath);
         }
-        curLoc = new Location(serializedLocation);
+        if(desc != null) {
+            Log.d("MarkCard","Setting description "+desc);
+            setDescription(desc);
+        }
     }
     private void setDescription(String desc){
         TextView descText = (TextView)findViewById(R.id.cardDesc);

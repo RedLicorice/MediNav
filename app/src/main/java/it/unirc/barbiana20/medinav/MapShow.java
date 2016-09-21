@@ -76,14 +76,17 @@ public class MapShow extends CommonActivity {
         markLayer = new CustomMarkLayer(mapView);
         //Set Mark click handler, this is called whenever the user taps on a mark.
         //We are not using this feature for now.
-                    /*markLayer.setMarkIsClickListener(new MarkLayer.MarkIsClickListener() {
+                    markLayer.setMarkIsClickListener(new MarkLayer.MarkIsClickListener() {
                         @Override
                         public void markIsClick(int num) {
                             //num is the Mark ID IN CURRENT FLOOR!
-
+                            Mark clickedMark = curFloor.getMark(num);
+                            Log.d("Mark clicked",String.format("Clicked mark with id %d name %s type %s",num,clickedMark.name, clickedMark.type.toString()));
+                            if(clickedMark.type == Mark.Types.Endpoint)
+                                LaunchMarkCard(clickedMark);
                             return;
                         }
-                    });*/
+                    });
         mapView.addLayer(markLayer);
     }
 
@@ -116,6 +119,8 @@ public class MapShow extends CommonActivity {
                     //Restore zoom
                     if(zoom != 0.0F)
                         mapView.setCurrentZoom(zoom);
+                    if(curPoint != null)
+                        mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
                 }
 
                 @Override
@@ -287,6 +292,15 @@ public class MapShow extends CommonActivity {
         }
     }
 
+    //Launch MarkCard Activity
+    public void LaunchMarkCard(Mark markToLaunch){
+        if(markToLaunch.cardDesc == null )
+            return;
+        Intent launchIntent = new Intent(this, MarkCard.class);
+        launchIntent.putExtra("CARD_IMAGE", markToLaunch.cardImage);
+        launchIntent.putExtra("CARD_DESC", markToLaunch.cardDesc);
+        startActivity(launchIntent);
+    }
     //QRCode scan callback
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         try {
@@ -299,7 +313,12 @@ public class MapShow extends CommonActivity {
                 }
                 //Data in QRCodes will be stored in json format, since it is human readable (easier generation)
                 Location location = new Location(re);
+                Mark scannedMark = mm.getMark(location);
                 UpdatePosition(location);
+                if(scannedMark.type == Mark.Types.Endpoint)
+                {
+                    LaunchMarkCard(scannedMark);
+                }
             } else {
                 Log.d("Error","Scan result is null!");
             }

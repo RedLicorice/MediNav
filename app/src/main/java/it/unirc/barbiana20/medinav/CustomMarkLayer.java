@@ -45,21 +45,25 @@ public class CustomMarkLayer extends MapBaseLayer {
         this.marks = marks;
         initLayer();
     }
-
+    private Bitmap scaleImage(Bitmap image, float factor)
+    {
+        return Bitmap.createScaledBitmap(image, (int)(image.getWidth() * factor),(int)(image.getHeight() * factor), true);
+    }
     private void initLayer() {
-        radiusMark = setValue(10f);
+        radiusMark = setValue(14f);
         //Load mark icons
         markIcons = new ArrayList<Bitmap>();
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.endpoint));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.waypoint));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.entrance));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.stair));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.elevator));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.toilet));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.first_aid));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.fire_extinguisher));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.ramp));
-        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.emergency_exit));
+        float factor = 0.65F;
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.endpoint),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.waypoint),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.entrance),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.stair),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.elevator),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.toilet),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.first_aid),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.fire_extinguisher),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.ramp),factor));
+        markIcons.add(scaleImage(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.emergency_exit),factor));
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -106,14 +110,13 @@ public class CustomMarkLayer extends MapBaseLayer {
 
                     paint.setColor(Color.BLACK);
                     paint.setTextSize(radiusMark);
-                    //mark name
+
+                    //mark ico
+                    Bitmap bmpDraw = markIcons.get(mark.type.ordinal());
+                    canvas.drawBitmap(bmpDraw, goal[0] - bmpDraw.getWidth() / 2, goal[1] - bmpDraw.getHeight() / 2, paint);
                     if (mapView.getCurrentZoom() > 1.0 ) {
                         canvas.drawText(mark.name, goal[0] - radiusMark, goal[1] - radiusMark / 2, paint);
                     }
-                    //mark ico
-                    Bitmap bmpDraw = markIcons.get(mark.type.ordinal());
-                    canvas.drawBitmap(bmpDraw, goal[0] - bmpDraw.getWidth() / 2,
-                            goal[1] - bmpDraw.getHeight() / 2, paint);
                     //Show a mark touched icon, i don't care bout this. leave aesthetics to the architects, lol
                     /*if (i == num && isClickMark) {
                         canvas.drawBitmap(bmpMarkTouch, goal[0] - bmpMarkTouch.getWidth() / 2,
