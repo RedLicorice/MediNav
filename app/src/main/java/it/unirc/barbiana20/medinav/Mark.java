@@ -7,33 +7,23 @@ import android.graphics.PointF;
  */
 
 public class Mark {
+    public enum Types {Endpoint, Waypoint, Entrance, Stair, Elevator, Toilet, FirstAid, FireEstinguisher, Ramp, EmergencyExit }
+    public boolean isQrCode;
     public PointF pos;
     public int id;
     public String name;
-    public int type;
-    private boolean stair;
-    private boolean exit;
+    public Types type;
     public Mark(int i, String n, PointF p, int t){
         pos = p;
         id = i;
-        type = t;
+        type = Types.values()[t];
         name = n;
     }
 
-
     public boolean isStair() {
-        return stair;
+        return type == Types.Stair;
     }
-
-    public void setStair(boolean stair) {
-        this.stair = stair;
-    }
-
-    public boolean isExit() {
-        return exit;
-    }
-
-    public void setExit(boolean exit) {
-        this.exit = exit;
+    public boolean isEntrance() {
+        return type == Types.Entrance;
     }
 }

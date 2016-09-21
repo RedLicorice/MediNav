@@ -34,7 +34,8 @@
         <activity android:name=".MapShow" />
         <activity android:name=".ChooseFaculty" />
         <activity android:name=".ChooseDestination" />
-        <activity android:name=".ChooseStartingPoint"></activity>
+        <activity android:name=".ChooseStartingPoint" />
+        <activity android:name=".EndpointDetails"></activity>
     </application>
 
 </manifest>

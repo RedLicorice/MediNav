@@ -20,6 +20,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Ok</string>
+    <string name="no_image">No image available.</string>
     <string name='map_loaded'>Map loaded!</string>
     <string name="position_updated">Position Updated</string>
     <string name="change_group_dialog_title">Change University</string>

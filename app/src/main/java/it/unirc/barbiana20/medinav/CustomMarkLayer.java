@@ -1,4 +1,4 @@
-package com.onlylemi.mapview.library.layer;
+package it.unirc.barbiana20.medinav;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,30 +10,25 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 
 import com.onlylemi.mapview.library.MapView;
+import com.onlylemi.mapview.library.layer.MapBaseLayer;
+import com.onlylemi.mapview.library.layer.MarkLayer;
 import com.onlylemi.mapview.library.utils.MapMath;
-import com.onlylemi.mapview.library.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MarkLayer
- *
- * @author: onlylemi
- * Edited by giuse on 21/09/2016
+ * Created by giuse on 21/09/2016.
  */
-public class MarkLayer extends MapBaseLayer {
 
-    private List<PointF> marks;
-    private List<Integer> markTypes;//Used to show a different icon for endpoints
-    public void setMarkTypes(List<Integer> ep)
-    {
-        markTypes = ep;
-    }
+public class CustomMarkLayer extends MapBaseLayer {
 
-    private List<String> marksName;
-    private MarkIsClickListener listener;
+    private List<Mark> marks;
 
-    private Bitmap bmpMark, bmpMarkTouch, bmpEndpoint;
+    private MarkLayer.MarkIsClickListener listener;
+
+    private List<Bitmap> markIcons;
+    //bmpMark, bmpMarkTouch, bmpEndpoint;
 
     private float radiusMark;
     private boolean isClickMark = false;
@@ -41,25 +36,30 @@ public class MarkLayer extends MapBaseLayer {
 
     private Paint paint;
 
-    public MarkLayer(MapView mapView) {
-        this(mapView, null, null);
+    public CustomMarkLayer(MapView mapView) {
+        this(mapView, null);
     }
 
-    public MarkLayer(MapView mapView, List<PointF> marks, List<String> marksName) {
+    public CustomMarkLayer(MapView mapView, List<Mark> marks) {
         super(mapView);
         this.marks = marks;
-        this.marksName = marksName;
-
         initLayer();
     }
 
     private void initLayer() {
         radiusMark = setValue(10f);
-
-        bmpMark = BitmapFactory.decodeResource(mapView.getResources(), R.mipmap.mark);
-        bmpMarkTouch = BitmapFactory.decodeResource(mapView.getResources(), R.mipmap.mark_touch);
-        bmpEndpoint = BitmapFactory.decodeResource(mapView.getResources(), R.mipmap.endpoint);
-
+        //Load mark icons
+        markIcons = new ArrayList<Bitmap>();
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.endpoint));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.waypoint));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.entrance));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.stair));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.elevator));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.toilet));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.first_aid));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.fire_extinguisher));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.ramp));
+        markIcons.add(BitmapFactory.decodeResource(mapView.getResources(), R.drawable.emergency_exit));
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -71,9 +71,10 @@ public class MarkLayer extends MapBaseLayer {
             if (!marks.isEmpty()) {
                 float[] goal = mapView.convertMapXYToScreenXY(event.getX(), event.getY());
                 for (int i = 0; i < marks.size(); i++) {
+                    Mark mark = marks.get(i);
+                    Bitmap markImage = markIcons.get(mark.type.ordinal());
                     if (MapMath.getDistanceBetweenTwoPoints(goal[0], goal[1],
-                            marks.get(i).x - bmpMark.getWidth() / 2, marks.get(i).y - bmpMark
-                                    .getHeight() / 2) <= 50) {
+                            mark.pos.x - markImage.getWidth() / 2, mark.pos.y - markImage.getHeight() / 2) <= 50) {
                         num = i;
                         isClickMark = true;
                         break;
@@ -99,25 +100,25 @@ public class MarkLayer extends MapBaseLayer {
             canvas.save();
             if (!marks.isEmpty()) {
                 for (int i = 0; i < marks.size(); i++) {
-                    PointF mark = marks.get(i);
-                    float[] goal = {mark.x, mark.y};
+                    Mark mark = marks.get(i);
+                    float[] goal = {mark.pos.x, mark.pos.y};
                     currentMatrix.mapPoints(goal);
 
                     paint.setColor(Color.BLACK);
                     paint.setTextSize(radiusMark);
                     //mark name
-                    if (mapView.getCurrentZoom() > 1.0 && marksName != null
-                            && marksName.size() == marks.size()) {
-                        canvas.drawText(marksName.get(i), goal[0] - radiusMark, goal[1] -
-                                radiusMark / 2, paint);
+                    if (mapView.getCurrentZoom() > 1.0 ) {
+                        canvas.drawText(mark.name, goal[0] - radiusMark, goal[1] - radiusMark / 2, paint);
                     }
                     //mark ico
-                    canvas.drawBitmap(bmpMark, goal[0] - bmpMark.getWidth() / 2,
-                            goal[1] - bmpMark.getHeight() / 2, paint);
-                    if (i == num && isClickMark) {
+                    Bitmap bmpDraw = markIcons.get(mark.type.ordinal());
+                    canvas.drawBitmap(bmpDraw, goal[0] - bmpDraw.getWidth() / 2,
+                            goal[1] - bmpDraw.getHeight() / 2, paint);
+                    //Show a mark touched icon, i don't care bout this. leave aesthetics to the architects, lol
+                    /*if (i == num && isClickMark) {
                         canvas.drawBitmap(bmpMarkTouch, goal[0] - bmpMarkTouch.getWidth() / 2,
                                 goal[1] - bmpMarkTouch.getHeight(), paint);
-                    }
+                    }*/
                 }
             }
             canvas.restore();
@@ -132,27 +133,19 @@ public class MarkLayer extends MapBaseLayer {
         this.num = num;
     }
 
-    public List<PointF> getMarks() {
+    public List<Mark> getMarks() {
         return marks;
     }
 
-    public void setMarks(List<PointF> marks) {
+    public void setMarks(List<Mark> marks) {
         this.marks = marks;
-    }
-
-    public List<String> getMarksName() {
-        return marksName;
-    }
-
-    public void setMarksName(List<String> marksName) {
-        this.marksName = marksName;
     }
 
     public boolean isClickMark() {
         return isClickMark;
     }
 
-    public void setMarkIsClickListener(MarkIsClickListener listener) {
+    public void setMarkIsClickListener(MarkLayer.MarkIsClickListener listener) {
         this.listener = listener;
     }
 

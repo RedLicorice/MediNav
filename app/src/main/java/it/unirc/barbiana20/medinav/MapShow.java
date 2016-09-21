@@ -18,11 +18,12 @@ import java.util.*;
 public class MapShow extends CommonActivity {
     //MapView and related layers
     private MapView mapView;
-    private MarkLayer markLayer;
+    private CustomMarkLayer markLayer;
     private RouteLayer routeLayer;
     private LocationLayer locationLayer;
     //Adapter class instance for using Floor data from MapManager in MapView
     private FloorAdapter floorAdapter;
+    private Floor curFloor;
     //Current position data
     private PointF curPoint;
     private Location curPosition;
@@ -45,13 +46,13 @@ public class MapShow extends CommonActivity {
         String destTarget = getIntent().getStringExtra("TARGET_POSITION");
         if(destTarget != null){
             Log.d("Received Destination",destTarget);
-            curDestination = ParseTarget(destTarget);
+            curDestination = new Location(destTarget);
         }
         //Grab starting point from caller intent (User has to scan a QRCode before navigation starts)
         String qrData = getIntent().getStringExtra("CURRENT_POSITION");
         if(qrData != null){
             Log.d("Received Position",qrData);
-            curPosition = ParseTarget(qrData);
+            curPosition = new Location(qrData);
             //Load current floor map
             LoadFloor(curPosition);
             //Update current position, in navigation mode this also checks if the user is in the correct building/university
@@ -72,7 +73,7 @@ public class MapShow extends CommonActivity {
         routeLayer = new RouteLayer(mapView);
         mapView.addLayer(routeLayer);
         //Create Mark Layer
-        markLayer = new MarkLayer(mapView);
+        markLayer = new CustomMarkLayer(mapView);
         //Set Mark click handler, this is called whenever the user taps on a mark.
         //We are not using this feature for now.
                     /*markLayer.setMarkIsClickListener(new MarkLayer.MarkIsClickListener() {
@@ -91,9 +92,9 @@ public class MapShow extends CommonActivity {
     {
         try {
             //Load Floor Data
-            Floor floor = mm.getFloor(pos);//Get current floor Data from MapManager - It's preloaded at application start!
-            floorAdapter = new FloorAdapter(floor);//Instantiate the adapter class for MapView
-            Bitmap mapImage = BitmapFactory.decodeStream(getAssets().open(floor.getMap()));//Load map image from assets
+            curFloor = mm.getFloor(pos);//Get current floor Data from MapManager - It's preloaded at application start!
+            floorAdapter = new FloorAdapter(curFloor);//Instantiate the adapter class for MapView
+            Bitmap mapImage = BitmapFactory.decodeStream(getAssets().open(curFloor.getMap()));//Load map image from assets
             MapUtils.init(floorAdapter.getNodeCount(), floorAdapter.getEdgeCount());//Initialize MapUtils with current floor graph
             //Initialize map view
             mapView = (MapView) findViewById(R.id.mapview);
@@ -110,9 +111,7 @@ public class MapShow extends CommonActivity {
                     Log.d("MAP_LOAD","Map load success");
                     routeLayer.setRouteList(null);//Reset route
                     routeLayer.setNodeList(floorAdapter.getNodes());
-                    markLayer.setMarks(floorAdapter.getMarks());
-                    markLayer.setMarksName(floorAdapter.getMarkNames());
-                    markLayer.setEndPoints(floorAdapter.getEndMarks());
+                    markLayer.setMarks(curFloor.marks);
                     mapView.refresh();
                     //Restore zoom
                     if(zoom != 0.0F)
@@ -146,7 +145,7 @@ public class MapShow extends CommonActivity {
      *  Handle position updates in same floor
      */
     public void UpdateFloorPosition(Location location){
-        curPoint = floorAdapter.getMark(location.getMarkId());
+        curPoint = curFloor.getMark(location.getMarkId()).pos;
         curPosition = location;
         if(locationLayer != null) {
             locationLayer.setCurrentPosition(curPoint);
@@ -252,17 +251,17 @@ public class MapShow extends CommonActivity {
             } else {
                 //If it's the first scan with a target in different floor, destStair is null
                 //Find nearest waypoint with "stair" attribute and set a route to it.
-                List<PointF> stairMarks = floorAdapter.getStairMarks();
-
                 destStair = curPoint;//We assume user is on a stair. If he is not...
-                if(!m.isStair())//we find the closest stair, and set it as our destination..
+                if(!m.isStair())//we find the closest stair or elevator, and set it as our destination..
                 {
                     double min = 0;
-                    for (PointF p : stairMarks) {
-                        double res = Math.sqrt(Math.pow(p.x - curPoint.x, 2) + Math.pow(p.y - curPoint.y, 2));
+                    for (Mark p : curFloor.marks) {
+                        if(p.type != Mark.Types.Elevator && p.type != Mark.Types.Stair)
+                            continue;
+                        double res = Math.sqrt(Math.pow(p.pos.x - curPoint.x, 2) + Math.pow(p.pos.y - curPoint.y, 2));
                         if (min == 0 || res < min) {
                             min = res;
-                            destStair = p;
+                            destStair = p.pos;
                         }
                     }
                     List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, floorAdapter.getNodes(), floorAdapter.getEdges());
@@ -299,7 +298,7 @@ public class MapShow extends CommonActivity {
                     return;
                 }
                 //Data in QRCodes will be stored in json format, since it is human readable (easier generation)
-                Location location = ParseTarget(re);
+                Location location = new Location(re);
                 UpdatePosition(location);
             } else {
                 Log.d("Error","Scan result is null!");

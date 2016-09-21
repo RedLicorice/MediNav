@@ -68,7 +68,7 @@
 
     <TextView
         android:text="@string/welcome_line"
-        android:layout_width="279dp"
+        android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:id="@+id/welcome_text"
         android:layout_marginStart="16dp"

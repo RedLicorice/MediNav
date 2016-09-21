@@ -1,5 +1,7 @@
 package it.unirc.barbiana20.medinav;
 
+import org.json.JSONObject;
+
 /**
  * Created by giuse on 06/09/2016.
  * This class contains location information, in form of:
@@ -24,6 +26,29 @@ public class Location {
         this.buildingId = buildingId;
         this.floorId = floorId;
         this.markId = markId;
+    }
+    public Location(String data){
+        try {
+            JSONObject object = new JSONObject(data);
+            ParseJson(object);
+        } catch(org.json.JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Location(JSONObject object){
+       ParseJson(object);
+    }
+
+    private void ParseJson(JSONObject object){
+        try {
+            this.universityId = object.getInt("u");
+            this.buildingId = object.getInt("b");
+            this.floorId = object.getInt("f");
+            this.markId = object.getInt("m");
+        } catch(org.json.JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getUniversityId() {
@@ -67,4 +92,5 @@ public class Location {
     }
 
     public String jsonSerialize() {return String.format("{\"u\":%d,\"b\":%d,\"f\":%d,\"m\":%d}",universityId,buildingId,floorId,markId); }
+
 }

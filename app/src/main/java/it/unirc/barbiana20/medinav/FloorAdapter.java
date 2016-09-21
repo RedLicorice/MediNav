@@ -26,19 +26,7 @@ public class FloorAdapter {
         {
             edges.add(new PointF(e.from,e.to));
         }
-        marks = new ArrayList<PointF>();
-        stairMarks = new ArrayList<PointF>();
-        endMarks = new ArrayList<PointF>();
-        markNames = new ArrayList<String>();
-        for(Mark m : f.marks)
-        {
-            marks.add(m.id,m.pos);
-            markNames.add(m.id,m.name);
-            if(m.isStair())
-                stairMarks.add(m.pos);
-            if(m.type == 0)
-                endMarks.add(m.pos);
-        }
+
     }
     public List<PointF> getNodes(){
         return nodes;
@@ -52,24 +40,11 @@ public class FloorAdapter {
     public int getEdgeCount(){
         return edges.size();
     }
-    public List<PointF> getMarks(){
-        return marks;
-    }
-    public List<PointF> getStairMarks(){
-        return stairMarks;
-    }
-    public List<PointF> getEndMarks(){
-        return endMarks;
-    }
-    public List<String> getMarkNames(){
-        return markNames;
-    }
+
     public PointF getNode(int id){
         return nodes.get(id);
     }
-    public PointF getMark(int id){
-        return marks.get(id);
-    }
+
     public String getMarkName(int id){
         return markNames.get(id);
     }

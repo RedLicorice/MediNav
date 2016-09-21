@@ -23,7 +23,6 @@ public class MapManager {
     }
 
     public List<University> getUniList() {
-
         return uniList;
     }
 
@@ -63,18 +62,10 @@ public class MapManager {
             return null;
         }
     }
+
     public Floor getFloor(Location location){
         try {
-            University university = getUniversity(location.getUniversityId());
-            if(university == null)
-            {
-                Log.e("ERROR","university is null!");
-            }
-            if(university.getBuildings().isEmpty())
-            {
-                Log.e("ERROR","university buildings is empty!");
-            }
-            Building building = university.getBuildings().get(location.getBuildingId());
+            Building building = getBuilding(location);
             Floor floor = building.getFloors().get(location.getFloorId());
             return floor;
         } catch (IndexOutOfBoundsException e)
@@ -84,6 +75,19 @@ public class MapManager {
             return null;
         }
     }
+
+    public Mark getMark(Location location){
+        try{
+            Floor f = getFloor(location);
+            return f.getMark(location.getMarkId());
+        } catch (IndexOutOfBoundsException e)
+        {
+            e.printStackTrace();
+            Log.e("GetFloor","Error while retrieving floor data!");
+            return null;
+        }
+    }
+    //Reverse Access
     public List<Location> getLocations(int universityId){
         return getLocations(universityId,false);
     }
@@ -97,7 +101,7 @@ public class MapManager {
                 Floor cFloor = cBuilding.getFloors().get(floorId);
                 for(int markId = 0; markId < cFloor.marks.size(); markId++){
                     Mark cMark = cFloor.marks.get(markId);
-                    if(all || cMark.type == 0) {
+                    if(all || cMark.type != Mark.Types.Waypoint) {
                         Location loc = new Location(universityId, buildingId, floorId, markId);
                         loc.setName(cMark.name);
                         res.add(loc);

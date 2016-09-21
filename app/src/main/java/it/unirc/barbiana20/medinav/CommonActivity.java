@@ -22,7 +22,6 @@ import java.io.*;
 
 public class CommonActivity extends AppCompatActivity {
     protected static MapManager mm;
-    private boolean isMMInit = false;
     public void InitMapManager(){
         //Load map data from assets - contains data for ALL maps
         //ToDo: Performance testing
@@ -36,19 +35,16 @@ public class CommonActivity extends AppCompatActivity {
             jsonData = new String(buffer, "UTF-8");
             JSONArray jsonUniversityArray = new JSONArray(jsonData);
             mm = new MapManager(jsonUniversityArray);
-            isMMInit = true;
             Log.d("Info","MapManager Loaded");
         } catch(IOException e) {
             e.printStackTrace();
             mm = null;
-            isMMInit = false;
             Log.e("MapData","IO Exception!!");
         }
         catch(org.json.JSONException e)
         {
             e.printStackTrace();
             mm = null;
-            isMMInit = false;
             Log.e("MapData","Json ERROR!!");
         }
     }
@@ -70,16 +66,5 @@ public class CommonActivity extends AppCompatActivity {
 
     public void scanQR(View view) {
         initiateQRScan();
-    }
-
-    public Location ParseTarget(String data){
-        try {
-            JSONObject object = new JSONObject(data);
-            Location res = new Location(object.getInt("u"),object.getInt("b"),object.getInt("f"),object.getInt("m"));
-            return res;
-        } catch(org.json.JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }
