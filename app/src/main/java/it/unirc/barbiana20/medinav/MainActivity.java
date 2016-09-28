@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -24,6 +26,24 @@ public class MainActivity extends CommonActivity {
         CheckPermissions();
         InitMapManager();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.over_flow_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_about:
+                Intent intent = new Intent(this, About.class);
+                startActivity(intent);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     // Navigate button handler
     // User will be asked to choose  destination and then scan a QRCode,
     // A path will then be generated for the selected destination.

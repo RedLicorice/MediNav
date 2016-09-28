@@ -35,6 +35,7 @@
         <activity android:name=".ChooseFaculty" />
         <activity android:name=".ChooseDestination" />
         <activity android:name=".ChooseStartingPoint" />
+        <activity android:name=".About" />
         <activity android:name=".MarkCard"></activity>
     </application>
 
