@@ -26,20 +26,6 @@ public class MapManager {
         return uniList;
     }
 
-    public MapManager(JSONArray jsonarray)
-    {
-        try {
-            uniList = new ArrayList<University>();
-
-            for (int i = 0; i < jsonarray.length(); i++) {
-                JSONObject jsonUniversity = jsonarray.getJSONObject(i);
-                uniList.add(new University(jsonUniversity));
-            }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
     public University getUniversity(int id){
         return uniList.get(id);
     }
@@ -89,9 +75,6 @@ public class MapManager {
     }
     //Reverse Access
     public List<Location> getLocations(int universityId){
-        return getLocations(universityId,false);
-    }
-    public List<Location> getLocations(int universityId, boolean all){
         List<Location> res = new ArrayList<Location>();
         University cUniversity = getUniversity(universityId);
         for(int buildingId = 0; buildingId < cUniversity.getBuildings().size(); buildingId++)
@@ -101,7 +84,7 @@ public class MapManager {
                 Floor cFloor = cBuilding.getFloors().get(floorId);
                 for(int markId = 0; markId < cFloor.marks.size(); markId++){
                     Mark cMark = cFloor.marks.get(markId);
-                    if((all || cMark.type != Mark.Types.Waypoint) && cMark.name != ""){
+                    if(!cMark.isWaypoint() && cMark.hasName()){
                         Location loc = new Location(universityId, buildingId, floorId, markId);
                         loc.setName(cMark.name);
                         res.add(loc);

@@ -35,7 +35,7 @@ public class ChooseStartingPoint extends CommonActivity {
         }
         final ListView listView = (ListView) findViewById(R.id.destinationList);
         int idUniversityChosen =  universityChosenIntent.getIntExtra("idUniversityChosen", 0);
-        final List<Location> locationList = mm.getLocations(idUniversityChosen,true);
+        final List<Location> locationList = mm.getLocations(idUniversityChosen);
         String[] destArray = new String[locationList.size()];
         for(int i = 0; i<locationList.size(); i++){
             Location location = locationList.get(i);
@@ -50,7 +50,6 @@ public class ChooseStartingPoint extends CommonActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     final int position, long id) {
-
                 locationChosen = locationList.get(position).jsonSerialize();
                 Intent mapShowIntent = new Intent(ChooseStartingPoint.this, MapShow.class);
                 mapShowIntent.putExtra("CURRENT_POSITION", locationChosen);

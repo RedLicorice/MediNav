@@ -15,23 +15,9 @@ public class Building {
     private String name;
     private List<Floor> floors;
 
-    public Building(JSONObject object)
-    {
-        try {
-            name = object.getString("name");
-            JSONArray jsonNodes = object.getJSONArray("floors");
-            floors = new ArrayList<Floor>();
-            for (int i=0; i < jsonNodes.length(); i++)
-            {
-                JSONObject jsonNode = jsonNodes.getJSONObject(i);
-                if(jsonNode != null)
-                    floors.add(new Floor(jsonNode));
-            }
-        } catch (org.json.JSONException e){
-            e.printStackTrace();
-        }
+    public Building(String name){
+        this.name = name;
     }
-
     public String getName() {
         return name;
     }

@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.util.List;
 
 /**
  * Created by giuse on 30/08/2016.
@@ -35,7 +36,8 @@ public class CommonActivity extends AppCompatActivity {
             jsonStream.close();
             jsonData = new String(buffer, "UTF-8");
             JSONArray jsonUniversityArray = new JSONArray(jsonData);
-            mm = new MapManager(jsonUniversityArray);
+            List<University> uniList =  MapDataDeserializer.getUniversityList(jsonUniversityArray);
+            mm = new MapManager(uniList);
             Log.d("Info","MapManager Loaded");
         } catch(IOException e) {
             e.printStackTrace();

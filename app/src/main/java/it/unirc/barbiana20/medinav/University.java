@@ -23,23 +23,6 @@ public class University {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    public University(JSONObject object)
-    {
-        try {
-            name = object.getString("name");
-            latitude = object.getDouble("lat");
-            longitude = object.getDouble("lng");
-            JSONArray jsonNodes = object.getJSONArray("buildings");
-            buildings = new ArrayList<Building>();
-            for (int i=0; i < jsonNodes.length(); i++)
-            {
-                JSONObject jsonNode = jsonNodes.getJSONObject(i);
-                buildings.add(new Building(jsonNode));
-            }
-        } catch (org.json.JSONException e){
-            e.printStackTrace();
-        }
-    }
 
     public String getName() {
         return name;

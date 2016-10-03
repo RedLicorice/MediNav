@@ -12,10 +12,7 @@ import java.util.List;
 public class FloorAdapter {
     private List<PointF> nodes;
     private List<PointF> edges;
-    private List<PointF> marks;
-    private List<PointF> endMarks;
-    private List<String> markNames;
-    private List<PointF> stairMarks;
+
     public FloorAdapter(Floor f){
         nodes = new ArrayList<PointF>();
         for(Node n : f.nodes){
@@ -34,18 +31,16 @@ public class FloorAdapter {
     public int getNodeCount(){
         return nodes.size();
     }
+
     public List<PointF> getEdges(){
         return edges;
     }
+
     public int getEdgeCount(){
         return edges.size();
     }
 
     public PointF getNode(int id){
         return nodes.get(id);
-    }
-
-    public String getMarkName(int id){
-        return markNames.get(id);
     }
 }

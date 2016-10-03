@@ -96,8 +96,12 @@ public class MapShow extends CommonActivity {
         try {
             //Load Floor Data
             curFloor = mm.getFloor(pos);//Get current floor Data from MapManager - It's preloaded at application start!
+            if(floorAdapter!= null){
+                floorAdapter = null;
+            }
             floorAdapter = new FloorAdapter(curFloor);//Instantiate the adapter class for MapView
             Bitmap mapImage = BitmapFactory.decodeStream(getAssets().open(curFloor.getMap()));//Load map image from assets
+
             MapUtils.init(floorAdapter.getNodeCount(), floorAdapter.getEdgeCount());//Initialize MapUtils with current floor graph
             //Initialize map view
             mapView = (MapView) findViewById(R.id.mapview);

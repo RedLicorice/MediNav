@@ -29,6 +29,10 @@ public final class MapUtils {
         nodesSize = nodessize;
         nodesContactSize = nodescontactsize;
     }
+    public static void reset(){
+        nodesSize = 0;
+        nodesContactSize = 0;
+    }
 
     /**
      * Get the distance between points
