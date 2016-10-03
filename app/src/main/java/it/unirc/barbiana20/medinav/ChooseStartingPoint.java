@@ -15,7 +15,6 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.List;
 
 public class ChooseStartingPoint extends CommonActivity {
-    boolean isExplore;
     private String locationChosen;
 
     @Override
@@ -23,16 +22,7 @@ public class ChooseStartingPoint extends CommonActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_starting_point);
         initToolbar();
-        isExplore = false;
         Intent universityChosenIntent = getIntent();
-        isExplore = universityChosenIntent.getBooleanExtra("MODE",isExplore);
-        if(!isExplore)
-        {
-            Log.d("Mode","Explore mode not active!");
-            //Hide FAB
-            android.support.design.widget.FloatingActionButton fab = (android.support.design.widget.FloatingActionButton) findViewById(R.id.qrScanFAB);
-            fab.setVisibility(View.GONE);
-        }
         final ListView listView = (ListView) findViewById(R.id.destinationList);
         int idUniversityChosen =  universityChosenIntent.getIntExtra("idUniversityChosen", 0);
         final List<Location> locationList = mm.getLocations(idUniversityChosen);

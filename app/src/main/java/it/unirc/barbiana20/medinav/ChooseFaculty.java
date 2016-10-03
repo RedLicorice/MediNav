@@ -47,7 +47,6 @@ public class ChooseFaculty extends CommonActivity  {
                                     final int position, long id) {
                 Intent universityChosenIntent = new Intent(ChooseFaculty.this, (isExplore) ? ChooseStartingPoint.class : ChooseDestination.class);
                 universityChosenIntent.putExtra("idUniversityChosen", position);
-                universityChosenIntent.putExtra("MODE",isExplore);
                 startActivity(universityChosenIntent);
 
             }
