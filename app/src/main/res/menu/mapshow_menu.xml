@@ -1,0 +1,39 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_floorup"
+        android:orderInCategory="1"
+        app:showAsAction="never"
+        android:title="@string/floorup"/>
+    <item
+        android:id="@+id/menu_floordown"
+        android:orderInCategory="2"
+        app:showAsAction="never"
+        android:title="@string/floordown"/>
+
+    <item
+        android:id="@+id/menu_emergency"
+        android:orderInCategory="3"
+        app:showAsAction="never"
+        android:title="@string/emergency">
+        <menu>
+            <item android:id="@+id/goto_firstaid" android:title="@string/firstaid"/>
+            <item android:id="@+id/goto_fireextinguisher" android:title="@string/fireextinguisher"/>
+            <item android:id="@+id/goto_emergencyexit" android:title="@string/emergencyexit"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_accessibility"
+        android:orderInCategory="3"
+        app:showAsAction="never"
+        android:title="@string/accessibility">
+        <menu>
+            <item android:id="@+id/goto_toilet" android:title="@string/toilet"/>
+            <item android:id="@+id/goto_ramp" android:title="@string/ramp"/>
+            <item android:id="@+id/goto_elevator" android:title="@string/elevator"/>
+            <item android:id="@+id/goto_stair" android:title="@string/stair"/>
+        </menu>
+    </item>
+</menu>

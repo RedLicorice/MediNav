@@ -21,6 +21,17 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Ok</string>
+    <string name="floorup">Floor Up</string>
+    <string name="floordown">Floor Down</string>
+    <string name="emergency">Emergency</string>
+    <string name="accessibility">Accessibility</string>
+    <string name="toilet">Toilet</string>
+    <string name="ramp">Ramp</string>
+    <string name="elevator">Elevator</string>
+    <string name="stair">Stair</string>
+    <string name="firstaid">First Aid</string>
+    <string name="fireextinguisher">Fire Extinguisher</string>
+    <string name="emergencyexit">Emergency Exit</string>
     <string name="no_image">No image available.</string>
     <string name='map_loaded'>Map loaded!</string>
     <string name="position_updated">Position Updated</string>

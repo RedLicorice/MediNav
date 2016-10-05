@@ -290,8 +290,7 @@ public final class MapMath {
      * @param linePoint2
      * @return
      */
-    public static boolean isObtuseAnglePointAndLine(PointF point, PointF linePoint1, PointF
-            linePoint2) {
+    public static boolean isObtuseAnglePointAndLine(PointF point, PointF linePoint1, PointF linePoint2) {
         // A*A + B*B < C*C
         float p_l1, p_l2, l1_l2;
         p_l1 = getDistanceBetweenTwoPoints(point, linePoint1);

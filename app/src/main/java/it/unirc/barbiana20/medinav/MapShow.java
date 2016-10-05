@@ -6,6 +6,10 @@ import android.content.*;
 import android.graphics.*;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.*;
@@ -27,6 +31,7 @@ public class MapShow extends CommonActivity {
     //Current position data
     private PointF curPoint;
     private Location curPosition;
+    private Location userPosition;
     //Current destination data
     private Location curDestination;
     private PointF destStair;//Used in navigation between floors
@@ -59,6 +64,49 @@ public class MapShow extends CommonActivity {
             UpdatePosition(curPosition);
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.mapshow_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_floorup:
+                _FloorUp();
+                return true;
+            case R.id.menu_floordown:
+                _FloorDown();
+                return true;
+            case R.id.goto_fireextinguisher:
+                GoToClosestMark(Mark.Types.FireEstinguisher);
+                return true;
+            case R.id.goto_stair:
+                GoToClosestMark(Mark.Types.Stair);
+                return true;
+            case R.id.goto_ramp:
+                GoToClosestMark(Mark.Types.Ramp);
+                return true;
+            case R.id.goto_toilet:
+                GoToClosestMark(Mark.Types.Toilet);
+                return true;
+            case R.id.goto_elevator:
+                GoToClosestMark(Mark.Types.Elevator);
+                return true;
+            case R.id.goto_emergencyexit:
+                GoToClosestMark(Mark.Types.EmergencyExit);
+                return true;
+            case R.id.goto_firstaid:
+                GoToClosestMark(Mark.Types.FirstAid);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     /*
     * Initialize MapView with specified position
     */
@@ -150,16 +198,78 @@ public class MapShow extends CommonActivity {
             e.printStackTrace();
         }
     }
+
+
+    private void _FloorUp(){
+        Building curBuilding = mm.getBuilding(curPosition);
+        List<Floor> floors = curBuilding.getFloors();
+        int upperFloorId = curPosition.getFloorId()+1;
+        if(floors.size() > upperFloorId){
+           ChangeFloor(upperFloorId);
+        }
+    }
+    private void _FloorDown(){
+        Building curBuilding = mm.getBuilding(curPosition);
+        List<Floor> floors = curBuilding.getFloors();
+        int lowerFloorId = curPosition.getFloorId()-1;
+        if(floors.size() > lowerFloorId && lowerFloorId > 0){
+            ChangeFloor(lowerFloorId);
+        }
+    }
+    private void ChangeFloor(int newFloorId){
+        Location fakeLocation = new Location(curPosition.getUniversityId(), curPosition.getBuildingId(), newFloorId, -1);
+        if(userPosition == null && curPosition.getFloorId() != -1)
+        {
+            //Save current position
+            Log.d("ChangeFloor","UserPosition updated!");
+            userPosition = curPosition;
+        } else {
+            if(userPosition.getFloorId() == newFloorId)
+            {
+                UpdatePosition(userPosition);
+                userPosition = null;
+                Log.d("ChangeFloor","UserPosition reset!");
+                return;
+            }
+        }
+        UpdatePosition(fakeLocation);
+    }
+    private void GoToClosestMark(Mark.Types type){
+        Mark dest = FindClosestMark(type);
+        if(dest != null){
+            curDestination = new Location(curPosition.getUniversityId(),curPosition.getBuildingId(),curPosition.getFloorId(),dest.id);
+            UpdatePosition(curPosition);
+        }
+    }
+    private Mark FindClosestMark(Mark.Types type)
+    {
+        double min = 0;
+        Mark result = null;
+        for (Mark p : curFloor.marks) {
+            if(p.type != type)
+                continue;
+            double res = Math.sqrt(Math.pow(p.pos.x - curPoint.x, 2) + Math.pow(p.pos.y - curPoint.y, 2));
+            if (min == 0 || res < min) {
+                min = res;
+                result = p;
+            }
+        }
+        return result;
+    }
     /*
      *  Handle position updates in same floor
      */
-    public void UpdateFloorPosition(Location location){
-        curPoint = curFloor.getMark(location.getMarkId()).pos;
+    public void UpdateFloorPosition(Location location) {
         curPosition = location;
-        if(locationLayer != null) {
-            locationLayer.setCurrentPosition(curPoint);
+        if (location.getMarkId() != -1){
+            curPoint = curFloor.getMark(location.getMarkId()).pos;
+            if (locationLayer != null) {
+                locationLayer.setCurrentPosition(curPoint);
+            }
+            mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
+        } else {
+            locationLayer.setCurrentPosition(null);
         }
-        mapView.mapCenterWithPoint(curPoint.x, curPoint.y);
         mapView.refresh();
         Toast.makeText(getApplicationContext(),R.string.position_updated,Toast.LENGTH_SHORT).show();
     }
@@ -184,6 +294,7 @@ public class MapShow extends CommonActivity {
         if(curDestination != null && curDestination.getUniversityId() != location.getUniversityId())
         {
             //Destination is in another university, show dialog
+            Log.d("Navigate-Dest:","Destination is in another university");
             University destUniversity = mm.getUniversity(curDestination.getUniversityId());
             String lat = String.format("%.6f",destUniversity.getLatitude()).replace(',','.');
             String lng = String.format("%.6f",destUniversity.getLongitude()).replace(',','.');
@@ -219,6 +330,7 @@ public class MapShow extends CommonActivity {
         //Target is in different building
         if(curDestination != null && curDestination.getBuildingId() != location.getBuildingId())
         {
+            Log.d("Navigate-Dest:","Destination is in another building");
             //Destination is in another building, show dialog
             Building destBuilding = mm.getBuilding(curDestination);
             AlertDialog.Builder dlgBuilder = new AlertDialog.Builder(this);
@@ -235,9 +347,11 @@ public class MapShow extends CommonActivity {
             alertDialog.show();
             return;
         }
+        if(location.getMarkId() == -1) return;
         //Target is in different floor
         if(curDestination != null && curDestination.getFloorId() != location.getFloorId())
         {
+            Log.d("Navigate-Dest:","Destination is in another floor");
             Floor f = mm.getFloor(location);
             Mark m = f.marks.get(location.getMarkId());
             if(destStair != null && curPoint.equals(destStair) || m.isStair()) {
@@ -288,9 +402,15 @@ public class MapShow extends CommonActivity {
                 curDestination.getBuildingId() == location.getBuildingId() &&
                 curDestination.getFloorId() == location.getFloorId())
         {
+            Log.d("Navigate-Dest:","Destination is in same floor");
             Floor f = mm.getFloor(location);
             Mark m = f.marks.get(curDestination.getMarkId());
+            Log.d("Navigate-Dest:","Destination name: "+(m.hasName() ? m.name : "NoName"));
+            Log.d("Navigate-Dest:","Destination type: "+m.type.toString());
             List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, m.pos, floorAdapter.getNodes(), floorAdapter.getEdges());
+            //int idNodeFrom = floorAdapter.ClosestNodeToPoint(curPoint);
+            //int idNodeTo = floorAdapter.ClosestNodeToPoint(m.pos);
+            //List<Integer> routeList = MapUtils.getShortestPathBetweenTwoPoints(idNodeFrom, idNodeTo,floorAdapter.getNodes(),floorAdapter.getEdges());
             routeLayer.setRouteList(routeList);
             mapView.refresh();
         }

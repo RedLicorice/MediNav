@@ -23,11 +23,25 @@ public class FloorAdapter {
         {
             edges.add(new PointF(e.from,e.to));
         }
-
+    }
+    public int ClosestNodeToPoint(PointF m)    {
+        double min = 0;
+        int result = -1;
+        int i=0;
+        for (PointF p : nodes) {
+            double res = Math.sqrt(Math.pow(p.x - m.x, 2) + Math.pow(p.y - m.y, 2));
+            if (min == 0 || res < min) {
+                min = res;
+                result = i;
+            }
+            i++;
+        }
+        return result;
     }
     public List<PointF> getNodes(){
         return nodes;
     }
+
     public int getNodeCount(){
         return nodes.size();
     }
