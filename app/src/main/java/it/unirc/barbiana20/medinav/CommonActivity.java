@@ -54,11 +54,13 @@ public class CommonActivity extends AppCompatActivity {
 
     //Launch MarkCard Activity
     public void LaunchMarkCard(Mark markToLaunch){
-        if(markToLaunch.cardDesc == null || markToLaunch.cardDesc == "")
+        if(markToLaunch.cardDesc == null || markToLaunch.cardDesc.equals(""))
             return;
         Intent launchIntent = new Intent(this, MarkCard.class);
-        launchIntent.putExtra("CARD_IMAGE", markToLaunch.cardImage);
         launchIntent.putExtra("CARD_DESC", markToLaunch.cardDesc);
+        if(markToLaunch.cardImage != null && !markToLaunch.cardImage.equals("")){
+            launchIntent.putExtra("CARD_IMAGE", markToLaunch.cardImage);
+        }
         startActivity(launchIntent);
     }
 
