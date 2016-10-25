@@ -25,8 +25,6 @@ import java.util.List;
 public class CommonActivity extends AppCompatActivity {
     protected static MapManager mm;
     public void InitMapManager(){
-        //Load map data from assets - contains data for ALL maps
-        //ToDo: Performance testing
         String jsonData;
         try {
             InputStream jsonStream = getAssets().open("mapData.json");

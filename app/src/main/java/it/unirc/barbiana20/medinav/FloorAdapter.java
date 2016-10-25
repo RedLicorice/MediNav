@@ -1,6 +1,7 @@
 package it.unirc.barbiana20.medinav;
 
 import android.graphics.PointF;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,14 @@ public class FloorAdapter {
         edges = new ArrayList<PointF>();
         for(Edge e : f.edges)
         {
+            if(e.from > nodes.size())
+            {
+                Log.d("FloorAdapter",String.format("Edge's \"from\" node is out of nodes list! Floor %s wanted node %d nodes size %d",f.getName(),e.from,nodes.size()));
+            }
+            if(e.to > nodes.size())
+            {
+                Log.d("FloorAdapter",String.format("Edge's \"to\" node is out of nodes list! Floor %s wanted node %d nodes size %d",f.getName(),e.from,nodes.size()));
+            }
             edges.add(new PointF(e.from,e.to));
         }
     }

@@ -2,7 +2,6 @@ package it.unirc.barbiana20.medinav;
 
 import android.graphics.PointF;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 

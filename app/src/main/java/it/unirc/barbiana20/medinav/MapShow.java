@@ -154,7 +154,7 @@ public class MapShow extends CommonActivity {
             //Initialize map view
             mapView = (MapView) findViewById(R.id.mapview);
             //save zoom
-            zoom = 0.0F;
+            zoom = mapView.getCurrentZoom();
             if(mapView.isMapLoadFinish())
                 zoom = mapView.getCurrentZoom();
             mapView.loadMap(mapImage);
@@ -286,7 +286,6 @@ public class MapShow extends CommonActivity {
         routeLayer.setRouteList(null);
         if(curDestination != null){
             Log.d("Navigate-Dest:",curDestination.jsonSerialize());
-            //Toast.makeText(getApplicationContext(),"[DEBUG]Destination set!",Toast.LENGTH_LONG).show();
         }
         ///Update route / building
         //curDestination = new Location(0,0,4,0);
@@ -354,7 +353,7 @@ public class MapShow extends CommonActivity {
             Log.d("Navigate-Dest:","Destination is in another floor");
             Floor f = mm.getFloor(location);
             Mark m = f.marks.get(location.getMarkId());
-            if(destStair != null && curPoint.equals(destStair) || m.isStair()) {
+            if(m.isStair()) {
                 //Target has reached a stair: Invite him to reach correct floor
                 destStair = null;
                 UpdateFloorPosition(location);
@@ -375,23 +374,18 @@ public class MapShow extends CommonActivity {
                 //If it's the first scan with a target in different floor, destStair is null
                 //Find nearest waypoint with "stair" attribute and set a route to it.
                 destStair = curPoint;//We assume user is on a stair. If he is not...
-                if(!m.isStair())//we find the closest stair or elevator, and set it as our destination..
-                {
-                    double min = 0;
-                    for (Mark p : curFloor.marks) {
-                        if(p.type != Mark.Types.Elevator && p.type != Mark.Types.Stair)
-                            continue;
-                        double res = Math.sqrt(Math.pow(p.pos.x - curPoint.x, 2) + Math.pow(p.pos.y - curPoint.y, 2));
-                        if (min == 0 || res < min) {
-                            min = res;
-                            destStair = p.pos;
-                        }
+                double min = 0;
+                for (Mark p : curFloor.marks) {
+                    if(!p.isStair())
+                        continue;
+                    double res = Math.sqrt(Math.pow(p.pos.x - curPoint.x, 2) + Math.pow(p.pos.y - curPoint.y, 2));
+                    if (min == 0 || res < min) {
+                        min = res;
+                        destStair = p.pos;
                     }
-                    List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, floorAdapter.getNodes(), floorAdapter.getEdges());
-                    routeLayer.setRouteList(routeList);
-                } else {
-                    Toast.makeText(getApplicationContext(),"You already are on a stair!",Toast.LENGTH_LONG).show();
                 }
+                List<Integer> routeList = MapUtils.getShortestDistanceBetweenTwoPoints(curPoint, destStair, floorAdapter.getNodes(), floorAdapter.getEdges());
+                routeLayer.setRouteList(routeList);
                 mapView.refresh();
                 return;
             }
@@ -426,7 +420,7 @@ public class MapShow extends CommonActivity {
                     //Scan aborted or not succesful
                     return;
                 }
-                //Data in QRCodes will be stored in json format, since it is human readable (easier generation)
+                //Data in QRCodes is stored in json format
                 Location location = new Location(re);
                 Mark scannedMark = mm.getMark(location);
                 UpdatePosition(location);

@@ -42,6 +42,12 @@ public final class MapMath {
      * @return
      */
     public static float getDistanceBetweenTwoPoints(PointF start, PointF end) {
+        if(start == null){
+            Log.d("MapView::MapMath","getDistanceBetweenTwoPoints: NULL Starting point!");
+        }
+        if(end == null){
+            Log.d("MapView::MapMath","getDistanceBetweenTwoPoints: NULL Ending point!");
+        }
         return (float) Math.sqrt(Math.pow(end.x - start.x, 2)
                 + Math.pow(end.y - start.y, 2));
     }

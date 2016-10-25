@@ -213,9 +213,20 @@ public final class MapUtils {
 
         // set value for matrix
         for (int i = 0; i < nodesContact.size(); i++) {
-            matrix[(int) nodesContact.get(i).x][(int) nodesContact.get(i).y] = MapMath
-                    .getDistanceBetweenTwoPoints(nodes.get((int) nodesContact.get(i).x),
-                            nodes.get((int) nodesContact.get(i).y));
+            int inode1 = (int)nodesContact.get(i).x;
+            int inode2 = (int)nodesContact.get(i).y;
+            PointF node1 = nodes.get(inode1);
+            PointF node2 = nodes.get(inode2);
+            float value = INF;
+            if(node1 == null || node2 == null) {
+                Log.d("MapUtils", String.format("getMatrixBetweenFloorPlanNodes null node while iterating matrix! Edge Index: %d Node 1 id: %d Node 2 id: %d Node 1: %s Node 2: %s",
+                        i, inode1, inode2, node1 != null ? node1.toString() : "null", node2!=null? node2.toString() : "null"));
+            } else {
+                Log.d("MapUtils", String.format("getMatrixBetweenFloorPlanNodes [getting] Edge Index: %d Node 1 id: %d Node 2 id: %d Node 1: %s Node 2: %s",
+                        i, inode1, inode2, node1 != null ? node1.toString() : "null", node2!=null? node2.toString() : "null"));
+                value = MapMath.getDistanceBetweenTwoPoints(node1, node2);
+            }
+            matrix[(int) nodesContact.get(i).x][(int) nodesContact.get(i).y] = value;
 
             matrix[(int) nodesContact.get(i).y][(int) nodesContact.get(i).x] = matrix[(int)
                     nodesContact
